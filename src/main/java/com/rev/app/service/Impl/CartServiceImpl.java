@@ -1,4 +1,4 @@
-package com.rev.app.service;
+package com.rev.app.service.Impl;
 
 import com.rev.app.entity.Cart;
 import com.rev.app.entity.CartItem;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CartService {
+public class CartServiceImpl {
 
     @Autowired private ICartRepository cartRepo;
     @Autowired private ICartItemRepository itemRepo;

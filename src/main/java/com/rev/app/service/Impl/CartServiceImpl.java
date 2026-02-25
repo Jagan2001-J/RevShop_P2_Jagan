@@ -8,27 +8,89 @@ import com.rev.app.repository.ICartItemRepository;
 import com.rev.app.repository.ICartRepository;
 import com.rev.app.repository.IProductRepository;
 import com.rev.app.repository.IUserRepository;
+import com.rev.app.service.Interface.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CartServiceImpl {
+public class CartServiceImpl implements ICartService {
 
-    @Autowired private ICartRepository cartRepo;
-    @Autowired private ICartItemRepository itemRepo;
-    @Autowired private IProductRepository productRepo;
-    @Autowired private IUserRepository userRepo;
+    @Autowired
+    private ICartRepository cartRepo;
+    @Autowired
+    private ICartItemRepository itemRepo;
+    @Autowired
+    private IProductRepository productRepo;
+    @Autowired
+    private IUserRepository userRepo;
 
-    public void addToCart(int UserId,int productId,int qty){
-        User u=UserRepo.findById(userId).get();
-        Cart cart=cartRepo.findByUser(u).orElseGet(()->cartRepo.save(new Cart(null,u)));
-        Product p=productRepo.findById(productId).get();
+    @Override
+    @Transactional
+    public void addToCart(Long userId, Long productId, Integer qty) {
+        User u = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Cart cart = cartRepo.findByUser(u).orElseGet(() -> cartRepo.save(Cart.builder().user(u).build()));
+        Product p = productRepo.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
 
-        CartItem item=new CartItem();
-        item.setCart(cart);
-        item.setProduct(p);
-        item.setQuantity(qty);
+        if (cart.getItems() == null) {
+            cart.setItems(new java.util.ArrayList<>());
+        }
 
-        itemRepo.save(item);
+        // Check if item already exists in cart
+        CartItem existingItem = cart.getItems().stream()
+                .filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst().orElse(null);
+
+        if (existingItem != null) {
+            existingItem.setQuantity(existingItem.getQuantity() + qty);
+            itemRepo.save(existingItem);
+        } else {
+            CartItem item = new CartItem();
+            item.setCart(cart);
+            item.setProduct(p);
+            item.setQuantity(qty);
+            cart.getItems().add(item);
+            itemRepo.save(item);
+        }
+        cartRepo.save(cart);
+    }
+
+    @Override
+    public Cart getCartByUserId(Long userId) {
+        User u = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return cartRepo.findByUser(u).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public void updateCartItemQuantity(Long cartItemId, Integer qty) {
+        CartItem item = itemRepo.findById(cartItemId).orElseThrow(() -> new RuntimeException("CartItem not found"));
+        if (qty <= 0) {
+            removeCartItem(cartItemId);
+        } else {
+            item.setQuantity(qty);
+            itemRepo.save(item);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void removeCartItem(Long cartItemId) {
+        CartItem item = itemRepo.findById(cartItemId).orElse(null);
+        if (item != null) {
+            Cart cart = item.getCart();
+            cart.getItems().remove(item);
+            cartRepo.save(cart);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void clearCart(Long userId) {
+        Cart cart = getCartByUserId(userId);
+        if (cart != null && cart.getItems() != null) {
+            cart.getItems().clear();
+            cartRepo.save(cart);
+        }
     }
 }

@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ICartRepository extends JpaRepository<Cart,Integer> {
+public interface ICartRepository extends JpaRepository<Cart,Long> {
     Optional<Cart> findByUser(User user);
 }

@@ -1,16 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Register</title>
-</head>
-<body>
-<form action="/users/register-ui" method="post">
-    <input name="name" placeholder="Name"/>
-    <input name="email" placeholder="Email"/>
-    <input name="password" placeholder="Password"/>
-    <button>Register</button>
-</form>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/base :: layout('Register Product - RevShop', ~{::section})}">
 
+<head></head>
+
+<body>
+    <section class="auth-wrapper my-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card glass-panel border-0">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <i class="fa-solid fa-user-plus fs-1 text-primary mb-3"></i>
+                                <h2 class="fw-bold text-dark"
+                                    th:text="${role == 'SELLER' ? 'Partner With Us' : 'Create an Account'}">Register
+                                </h2>
+                                <p class="text-secondary"
+                                    th:text="${role == 'SELLER' ? 'Register as a Seller and start earning' : 'Join RevShop to start shopping'}">
+                                </p>
+                            </div>
+
+                            <!-- Error Message Alert -->
+                            <div th:if="${error}" class="alert alert-danger" role="alert">
+                                <i class="fa-solid fa-circle-exclamation me-2"></i><span th:text="${error}"></span>
+                            </div>
+
+                            <form th:action="@{/register}" method="post" th:object="${userDto}">
+                                <input type="hidden" name="role" th:value="${role}">
+
+                                <div class="mb-3">
+                                    <label for="name" class="form-label text-secondary small fw-bold">Full Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i
+                                                class="fa-regular fa-user text-secondary"></i></span>
+                                        <input type="text" class="form-control bg-light border-start-0 py-2 shadow-none"
+                                            id="name" name="name" required placeholder="John Doe">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email" class="form-label text-secondary small fw-bold">Email
+                                        address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i
+                                                class="fa-regular fa-envelope text-secondary"></i></span>
+                                        <input type="email"
+                                            class="form-control bg-light border-start-0 py-2 shadow-none" id="email"
+                                            name="email" required placeholder="name@example.com">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label text-secondary small fw-bold">Phone
+                                        Number</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i
+                                                class="fa-solid fa-phone text-secondary"></i></span>
+                                        <input type="text" class="form-control bg-light border-start-0 py-2 shadow-none"
+                                            id="phone" name="phone" required placeholder="+1 234 567 8901">
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="password"
+                                        class="form-label text-secondary small fw-bold">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i
+                                                class="fa-solid fa-lock text-secondary"></i></span>
+                                        <input type="password"
+                                            class="form-control bg-light border-start-0 py-2 shadow-none" id="password"
+                                            name="password" required placeholder="••••••••">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold rounded-pill">Create
+                                    Account</button>
+                            </form>
+
+                            <div class="mt-4 text-center">
+                                <p class="text-secondary small">Already have an account? <a th:href="@{/login}"
+                                        class="text-decoration-none fw-bold text-primary custom-hover">Sign In</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
+
 </html>

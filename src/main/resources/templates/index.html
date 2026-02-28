@@ -1,12 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome to Revshop</title>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/base :: layout('Home - RevShop', ~{::section})}">
+
+<head></head>
+
 <body>
-<h1>Welcome to RevShop</h1>
-<a href="/users/login">Login</a>
-<a href="/users/register">Register</a>
+
+    <section>
+        <!-- Hero Section -->
+        <div class="p-5 mb-5 bg-primary text-white rounded-3 shadow"
+            style="background: linear-gradient(135deg, #4F46E5 0%, #10B981 100%) !important;">
+            <div class="container-fluid py-5 text-center">
+                <h1 class="display-4 fw-bold mb-3"><i class="fa-solid fa-cart-shopping me-3"></i>Welcome to RevShop</h1>
+                <p class="fs-4 mb-4">Discover premium products at unbeatable prices.</p>
+                <a th:href="@{/products}" class="btn btn-light btn-lg rounded-pill px-5 fw-bold text-primary shadow-sm"
+                    type="button">Shop Now</a>
+            </div>
+        </div>
+
+        <!-- Featured Categories Section -->
+        <div class="container mb-5">
+            <h2 class="fw-bold mb-4 text-dark text-center">Shop by Category</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-3" th:each="category : ${categories}">
+                    <div class="card h-100 border-0 shadow-sm product-card">
+                        <div class="card-body text-center p-4">
+                            <i class="fa-solid fa-layer-group fs-1 text-primary mb-3"></i>
+                            <h5 class="card-title fw-bold" th:text="${category.name()}">Category Name</h5>
+                            <a th:href="@{/products(category=${category.name()})}"
+                                class="btn btn-outline-primary rounded-pill btn-sm mt-2 px-4">Browse</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3" th:if="${categories == null or categories.length == 0}">
+                    <div class="card h-100 border-0 shadow-sm bg-light">
+                        <div class="card-body text-center p-4 text-muted">
+                            <i class="fa-solid fa-box-open fs-1 mb-3"></i>
+                            <h5 class="card-title fw-bold">No Categories Found</h5>
+                            <p class="card-text small">Stay tuned for new product categories!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Products Section -->
+        <div class="container mb-5">
+            <h2 class="fw-bold mb-4 text-dark text-center">Featured Products</h2>
+            <div class="row g-4">
+                <div class="col-md-3" th:each="product : ${featuredProducts}">
+                    <div class="card h-100 border-0 shadow-sm product-card">
+                        <div class="position-absolute top-0 end-0 p-2" th:if="${product.discountedPrice != null}">
+                            <span class="badge bg-danger rounded-pill">Sale</span>
+                        </div>
+                        <img th:src="${product.imageUrl != null ? product.imageUrl : 'https://dummyimage.com/400x300/dee2e6/6c757d.jpg&text=No+Image'}"
+                            class="card-img-top" alt="Product Image" style="height: 200px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold text-truncate" th:text="${product.name}">Product Name</h5>
+                            <div class="mb-2">
+                                <span class="text-warning small">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-regular fa-star-half-stroke"></i>
+                                </span>
+                                <span class="text-secondary small ms-1">(120 reviews)</span>
+                            </div>
+                            <div class="mt-auto">
+                                <div th:if="${product.discountedPrice != null}">
+                                    <span class="fs-5 fw-bold text-dark"
+                                        th:text="'Rs.' + ${product.discountedPrice}">Rs.99.99</span>
+                                    <span class="text-secondary text-decoration-line-through small ms-2"
+                                        th:text="'Rs.' + ${product.price}">Rs.120.00</span>
+                                </div>
+                                <div th:unless="${product.discountedPrice != null}">
+                                    <span class="fs-5 fw-bold text-dark"
+                                        th:text="'Rs.' + ${product.price}">Rs.99.99</span>
+                                </div>
+                                <a th:href="@{/product/{id}(id=${product.id})}"
+                                    class="btn btn-primary w-100 rounded-pill mt-3">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 text-center" th:if="${featuredProducts == null or featuredProducts.isEmpty()}">
+                    <p class="text-secondary my-5">No featured products available at the moment.</p>
+                </div>
+            </div>
+            <div class="text-center mt-5" th:if="${featuredProducts != null and !featuredProducts.isEmpty()}">
+                <a th:href="@{/products}" class="btn btn-outline-dark rounded-pill px-5 py-2 fw-bold">View All
+                    Products</a>
+            </div>
+        </div>
+    </section>
+
 </body>
+
 </html>

@@ -1,16 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{fragments/base :: layout('Login - RevShop', ~{::section})}">
+
+<head></head>
+
 <body>
-<form action="/users/login-ui" method="post">
+  <section class="auth-wrapper">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-5">
+          <div class="card glass-panel border-0">
+            <div class="card-body p-5">
+              <div class="text-center mb-4">
+                <i class="fa-solid fa-cart-shopping fs-1 text-primary mb-3"></i>
+                <h2 class="fw-bold text-dark">Welcome Back</h2>
+                <p class="text-secondary">Please sign in to your account</p>
+              </div>
 
-  <input name="email"/>
-  <input name="password"/>
-  <button>Login</button>
-</form>
+              <!-- Error Message Alert -->
+              <div th:if="${error}" class="alert alert-danger" role="alert">
+                <i class="fa-solid fa-circle-exclamation me-2"></i><span th:text="${error}"></span>
+              </div>
+              <div th:if="${msg}" class="alert alert-success" role="alert">
+                <i class="fa-solid fa-circle-check me-2"></i><span th:text="${msg}"></span>
+              </div>
 
+              <form th:action="@{/login}" method="post">
+                <div class="mb-3">
+                  <label for="email" class="form-label text-secondary small fw-bold">Email address</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i
+                        class="fa-regular fa-envelope text-secondary"></i></span>
+                    <input type="email" class="form-control bg-light border-start-0 py-2 shadow-none" id="email"
+                      name="email" required placeholder="name@example.com">
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <label for="password" class="form-label text-secondary small fw-bold">Password</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i
+                        class="fa-solid fa-lock text-secondary"></i></span>
+                    <input type="password" class="form-control bg-light border-start-0 py-2 shadow-none" id="password"
+                      name="password" required placeholder="••••••••">
+                  </div>
+                  <div class="text-end mt-2">
+                    <a th:href="@{/forgot-password}" class="text-decoration-none small text-primary custom-hover">Forgot
+                      password?</a>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold rounded-pill">Sign In</button>
+              </form>
+
+              <div class="mt-4 text-center">
+                <p class="text-secondary mb-2 small">Don't have an account?</p>
+                <div class="d-flex justify-content-center gap-2">
+                  <a th:href="@{/register-buyer}" class="btn btn-outline-primary btn-sm rounded-pill px-3">Register as
+                    Buyer</a>
+                  <a th:href="@{/register-seller}" class="btn btn-outline-dark btn-sm rounded-pill px-3">Register as
+                    Seller</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </body>
+
 </html>

@@ -1,7 +1,6 @@
 package com.rev.app.service.Interface;
 
 import com.rev.app.entity.Cart;
-import com.rev.app.entity.CartItem;
 
 public interface ICartService {
     void addToCart(Long userId, Long productId, Integer qty);

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/password-recovery")
+@RequestMapping("/forgot-password")
 public class PasswordRecoveryController {
 
     @Autowired
@@ -18,7 +18,7 @@ public class PasswordRecoveryController {
 
     @GetMapping
     public String showRecoveryForm() {
-        return "password-recovery"; // assuming a view named password-recovery.html exists
+        return "forgot-password";
     }
 
     @PostMapping
@@ -30,6 +30,6 @@ public class PasswordRecoveryController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Failed to process recovery request.");
         }
-        return "redirect:/password-recovery";
+        return "redirect:/forgot-password";
     }
 }

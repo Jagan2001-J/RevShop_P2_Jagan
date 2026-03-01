@@ -1,6 +1,9 @@
 package com.rev.app.service.Impl;
 
 import com.rev.app.entity.*;
+import com.rev.app.exception.BadRequestException;
+import com.rev.app.exception.InsufficientStockException;
+import com.rev.app.exception.ResourceNotFoundException;
 import com.rev.app.repository.*;
 import com.rev.app.service.Interface.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,18 +38,18 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     @Transactional
     public Order placeOrder(Long userId, Long shippingAddressId, Long billingAddressId, String paymentMethodStr) {
-        User u = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        Cart cart = cartRepo.findByUser(u).orElseThrow(() -> new RuntimeException("Cart not found"));
+        User u = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Cart cart = cartRepo.findByUser(u).orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
         List<CartItem> cartItems = cartItemRepo.findByCart(cart);
 
         if (cartItems.isEmpty()) {
-            throw new RuntimeException("Cart is empty");
+            throw new BadRequestException("Cart is empty");
         }
 
         Address shipping = addressRepo.findById(shippingAddressId)
-                .orElseThrow(() -> new RuntimeException("Shipping address not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Shipping address not found"));
         Address billing = addressRepo.findById(billingAddressId)
-                .orElseThrow(() -> new RuntimeException("Billing address not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Billing address not found"));
 
         BigDecimal totalAmount = BigDecimal.ZERO;
         for (CartItem item : cartItems) {
@@ -79,7 +82,7 @@ public class OrderServiceImpl implements IOrderService {
             // Decrease Stock
             Product p = item.getProduct();
             if (p.getQuantity() < item.getQuantity()) {
-                throw new RuntimeException("Insufficient stock for product: " + p.getName());
+                throw new InsufficientStockException("Insufficient stock for product: " + p.getName());
             }
             p.setQuantity(p.getQuantity() - item.getQuantity());
             productRepo.save(p);
@@ -119,13 +122,13 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public List<Order> getOrdersByUser(Long userId) {
-        User u = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User u = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return orderRepo.findByUserOrderByCreatedAtDesc(u);
     }
 
     @Override
     public Order getOrderById(Long orderId) {
-        return orderRepo.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+        return orderRepo.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
 
     @Override

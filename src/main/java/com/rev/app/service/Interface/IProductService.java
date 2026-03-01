@@ -17,4 +17,6 @@ public interface IProductService {
     List<Product> getProductsByCategory(Long categoryId);
 
     List<Product> getProductsBySeller(Long sellerId);
+
+    List<Product> searchProducts(String name);
 }

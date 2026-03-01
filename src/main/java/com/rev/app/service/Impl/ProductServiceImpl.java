@@ -50,15 +50,22 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public List<Product> getProductsByCategory(Long categoryId) {
-        // Since we removed Category as an entity, we might not need this by ID anymore.
-        // If needed, we'd need to map ID to Enum if we kept IDs.
-        // For now, returning empty or filtering by ordinal if preferred.
-        return repo.findAll().stream().filter(p -> p.getCategory().ordinal() == categoryId.intValue()).toList();
+        // Map ID to Category enum for type safety and performance
+        if (categoryId < 0 || categoryId >= Product.Category.values().length) {
+            return List.of();
+        }
+        Product.Category category = Product.Category.values()[categoryId.intValue()];
+        return repo.findByCategory(category);
     }
 
     @Override
     public List<Product> getProductsBySeller(Long sellerId) {
         return repo.findAll().stream().filter(p -> p.getSeller() != null && p.getSeller().getId().equals(sellerId))
                 .toList();
+    }
+
+    @Override
+    public List<Product> searchProducts(String name) {
+        return repo.findByNameContainingIgnoreCase(name);
     }
 }

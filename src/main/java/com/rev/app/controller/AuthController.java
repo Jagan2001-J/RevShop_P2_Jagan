@@ -20,27 +20,33 @@ public class AuthController {
     private IUserService userService;
 
     @GetMapping("/login")
-    public String showLoginForm() {
+    public String showLoginForm(@RequestParam(value = "error", required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Invalid email or password.");
+        }
         return "login";
     }
 
-    @PostMapping("/login")
-    public String login(@RequestParam String email, @RequestParam String password,
-            HttpSession session, RedirectAttributes redirectAttributes) {
-        try {
-            User user = userService.loginUser(email, password);
-            session.setAttribute("user", user);
-
-            if (user.getRole() == User.Role.SELLER) {
-                return "redirect:/seller/dashboard";
-            }
-            return "redirect:/";
-
-        } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("error", "Invalid email or password.");
-            return "redirect:/login";
-        }
-    }
+    /*
+     * @PostMapping("/login")
+     * public String login(@RequestParam String email, @RequestParam String
+     * password,
+     * HttpSession session, RedirectAttributes redirectAttributes) {
+     * try {
+     * User user = userService.loginUser(email, password);
+     * session.setAttribute("user", user);
+     * 
+     * if (user.getRole() == User.Role.SELLER) {
+     * return "redirect:/seller/dashboard";
+     * }
+     * return "redirect:/";
+     * 
+     * } catch (RuntimeException e) {
+     * redirectAttributes.addFlashAttribute("error", "Invalid email or password.");
+     * return "redirect:/login";
+     * }
+     * }
+     */
 
     @GetMapping("/register-buyer")
     public String showBuyerRegistrationForm(Model model) {

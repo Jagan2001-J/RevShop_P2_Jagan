@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/base :: layout('My Wishlist - RevShop', ~{::section})}">
+
+<head></head>
+
+<body>
+    <section class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark mb-0"><i class="fa-solid fa-heart me-3 text-danger"></i>Your Wishlist</h2>
+            <a th:href="@{/products}" class="btn btn-outline-primary rounded-pill px-4">Continue Shopping</a>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div th:if="${msg}" class="alert alert-success shadow-sm mb-4"><i
+                class="fa-solid fa-circle-check me-2"></i><span th:text="${msg}"></span></div>
+        <div th:if="${error}" class="alert alert-danger shadow-sm mb-4"><i
+                class="fa-solid fa-circle-exclamation me-2"></i><span th:text="${error}"></span></div>
+
+        <!-- Empty State -->
+        <div th:if="${favorites == null or favorites.isEmpty()}"
+            class="text-center py-5 bg-white rounded-4 shadow-sm border mt-4">
+            <i class="fa-solid fa-heart-circle-xmark fs-1 text-secondary mb-3 opacity-50"
+                style="font-size: 5rem !important;"></i>
+            <h3 class="fw-bold text-dark">Your wishlist is empty</h3>
+            <p class="text-secondary mb-4">Save items you like to your wishlist so you can find them later.</p>
+            <a th:href="@{/products}" class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow-sm">Explore
+                Products</a>
+        </div>
+
+        <!-- Wishlist Items -->
+        <div th:if="${favorites != null and !favorites.isEmpty()}" class="row g-4">
+            <div class="col-12" th:each="favorite : ${favorites}">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
+                    <div class="card-body p-4 bg-white">
+                        <div class="row align-items-center">
+                            <!-- Product Image -->
+                            <div class="col-md-2 col-4">
+                                <a th:href="@{/product/{id}(id=${favorite.product.id})}">
+                                    <img th:src="${favorite.product.imageUrl != null ? favorite.product.imageUrl : 'https://dummyimage.com/150x150/dee2e6/6c757d.jpg&text=No+Image'}"
+                                        class="img-fluid rounded shadow-sm" alt="Product Image">
+                                </a>
+                            </div>
+
+                            <!-- Product Details -->
+                            <div class="col-md-6 col-8">
+                                <a th:href="@{/product/{id}(id=${favorite.product.id})}"
+                                    class="text-decoration-none text-dark fw-bold fs-5 mb-1 d-block custom-hover"
+                                    th:text="${favorite.product.name}">Product Name</a>
+                                <p class="text-secondary small mb-2"><i class="fa-solid fa-tag me-1 text-primary"></i>
+                                    <span th:text="${favorite.product.category.name()}">Category</span>
+                                </p>
+                                <p class="text-secondary small mb-1">Sold by: <span
+                                        th:text="${favorite.product.seller.name}">Seller</span></p>
+
+                                <div class="mt-2">
+                                    <div th:if="${favorite.product.discountedPrice != null}">
+                                        <span class="fs-5 fw-bold text-dark"
+                                            th:text="'Rs.' + ${favorite.product.discountedPrice}">Rs.0.00</span>
+                                        <span class="text-secondary text-decoration-line-through small ms-2"
+                                            th:text="'Rs.' + ${favorite.product.price}">Rs.0.00</span>
+                                    </div>
+                                    <div th:unless="${favorite.product.discountedPrice != null}">
+                                        <span class="fs-5 fw-bold text-dark"
+                                            th:text="'Rs.' + ${favorite.product.price}">Rs.0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="col-md-4 mt-3 mt-md-0 d-flex flex-column gap-2 text-md-end">
+                                <!-- Add to Cart Form -->
+                                <form th:action="@{/cart/add}" method="post" th:if="${favorite.product.quantity > 0}">
+                                    <input type="hidden" name="productId" th:value="${favorite.product.id}" />
+                                    <input type="hidden" name="quantity" value="1" />
+                                    <button type="submit" class="btn btn-primary rounded-pill w-100 fw-bold shadow-sm">
+                                        <i class="fa-solid fa-cart-plus me-2"></i>Add to Cart
+                                    </button>
+                                </form>
+                                <span th:if="${favorite.product.quantity <= 0}"
+                                    class="badge bg-secondary rounded-pill py-2 w-100">Out of Stock</span>
+
+                                <!-- Remove from Favorites -->
+                                <form th:action="@{/favorites/remove}" method="post">
+                                    <input type="hidden" name="productId" th:value="${favorite.product.id}" />
+                                    <button type="submit" class="btn btn-outline-danger rounded-pill w-100 btn-sm">
+                                        <i class="fa-solid fa-trash-can me-2"></i>Remove from Wishlist
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+    <header th:fragment="header"
+        class="navbar navbar-expand-lg navbar-dark bg-primary premium-header sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" th:href="@{/}">
+                <i class="fa-solid fa-cart-shopping me-2"></i>RevShop
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Search Bar -->
+                <form class="d-flex mx-auto col-md-6" th:action="@{/products}" method="get">
+                    <input class="form-control rounded-start-pill border-0 shadow-none" type="search"
+                        placeholder="Search for products..." name="keyword">
+                    <button class="btn btn-light rounded-end-pill px-4 ms-0" type="submit"><i
+                            class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+
+                    <li class="nav-item me-2" th:if="${session.user == null}">
+                        <a class="nav-link" th:href="@{/login}"><i class="fa-solid fa-user me-1"></i>Login /
+                            Register</a>
+                    </li>
+
+                    <!-- Generic Buyer Links -->
+                    <li class="nav-item me-2" th:if="${session.user != null and session.user.role.name() == 'BUYER'}">
+                        <a class="nav-link" th:href="@{/cart}">
+                            <i class="fa-solid fa-cart-shopping fs-5"></i>
+                            <span class="badge rounded-pill bg-warning text-dark position-absolute mt-1 ms-n1"
+                                style="font-size: 0.6em;" th:text="${cartCount}">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown"
+                        th:if="${session.user != null and session.user.role.name() == 'BUYER'}">
+                        <a class="nav-link dropdown-toggle" href="#" id="buyerDropdown" role="button"
+                            data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-circle-user fs-5 me-1"></i>[[${session.user.name}]]
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li><a class="dropdown-item" th:href="@{/orders}"><i
+                                        class="fa-solid fa-box-open me-2 text-primary"></i>My Orders</a></li>
+                            <li><a class="dropdown-item" th:href="@{/favorites}"><i
+                                        class="fa-solid fa-heart me-2 text-danger"></i>Wishlist</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" th:href="@{/logout}"><i
+                                        class="fa-solid fa-right-from-bracket me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Seller Links -->
+                    <li class="nav-item dropdown"
+                        th:if="${session.user != null and session.user.role.name() == 'SELLER'}">
+                        <a class="nav-link dropdown-toggle bg-light text-primary rounded px-3 fw-bold" href="#"
+                            id="sellerDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-store fs-5 me-1"></i>Seller Dashboard
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li><a class="dropdown-item" th:href="@{/seller/dashboard}"><i
+                                        class="fa-solid fa-chart-line me-2 text-success"></i>Overview</a></li>
+                            <li><a class="dropdown-item" th:href="@{/seller/inventory}"><i
+                                        class="fa-solid fa-boxes-stacked me-2 text-info"></i>Inventory</a></li>
+                            <li><a class="dropdown-item" th:href="@{/seller/orders}"><i
+                                        class="fa-solid fa-clipboard-list me-2 text-warning"></i>Manage Orders</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" th:href="@{/logout}"><i
+                                        class="fa-solid fa-right-from-bracket me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+</body>
+
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/base :: layout('Seller Dashboard - RevShop', ~{::section})}">
+
+<head></head>
+
+<body>
+    <section class="container py-4">
+        <div class="row mb-4">
+            <div class="col-12 d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="fw-bold text-dark mb-0"><i class="fa-solid fa-chart-line text-primary me-2"></i>Dashboard
+                        Overview</h2>
+                    <p class="text-secondary small mt-1">Welcome back, <span class="fw-bold text-dark"
+                            th:text="${session.user.name}">Seller Name</span></p>
+                </div>
+                <div>
+                    <a th:href="@{/seller/product/new}" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold">
+                        <i class="fa-solid fa-plus me-2"></i> Add New Product
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm glass-panel text-center p-3"
+                    style="border-top: 5px solid var(--primary) !important;">
+                    <div class="card-body">
+                        <div class="fs-1 text-primary mb-2"><i class="fa-solid fa-boxes-stacked"></i></div>
+                        <h5 class="card-title fw-bold text-dark">Total Products</h5>
+                        <h2 class="fw-bold mb-0 text-dark" th:text="${totalProducts}">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm glass-panel text-center p-3"
+                    style="border-top: 5px solid #10B981 !important;">
+                    <div class="card-body">
+                        <div class="fs-1 text-success mb-2"><i class="fa-solid fa-cart-arrow-down"></i></div>
+                        <h5 class="card-title fw-bold text-dark">Total Orders</h5>
+                        <h2 class="fw-bold mb-0 text-success" th:text="${totalOrders}">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm glass-panel text-center p-3"
+                    style="border-top: 5px solid #F59E0B !important;">
+                    <div class="card-body">
+                        <div class="fs-1 text-warning mb-2"><i class="fa-solid fa-sack-dollar"></i></div>
+                        <h5 class="card-title fw-bold text-dark">Total Revenue</h5>
+                        <h2 class="fw-bold mb-0 text-warning" th:text="'Rs.' + ${totalRevenue}">Rs.0.00</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm glass-panel text-center p-3"
+                    style="border-top: 5px solid #EF4444 !important;">
+                    <div class="card-body">
+                        <div class="fs-1 text-danger mb-2"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <h5 class="card-title fw-bold text-dark">Low Stock Items</h5>
+                        <h2 class="fw-bold mb-0 text-danger" th:text="${lowStockCount}">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Recent Orders Table -->
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div
+                        class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold"><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>Recent
+                            Orders</h5>
+                        <a th:href="@{/seller/orders}" class="btn btn-sm btn-outline-dark rounded-pill px-3">View
+                            All</a>
+                    </div>
+                    <div class="card-body p-0 table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-secondary">
+                                <tr>
+                                    <th class="ps-4">Order ID</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Item</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="orderItem : ${recentOrderItems}">
+                                    <td class="ps-4"><span class="fw-bold"
+                                            th:text="'#' + ${orderItem.order.id}">#1234</span></td>
+                                    <td th:text="${#temporals.format(orderItem.order.createdAt, 'MMM dd, yyyy')}">Date
+                                    </td>
+                                    <td th:text="${orderItem.order.user.name}">John Doe</td>
+                                    <td th:text="${orderItem.product.name}">Product Name</td>
+                                    <td class="fw-bold text-success"
+                                        th:text="'Rs.' + (${orderItem.price} * ${orderItem.quantity})">Rs.100</td>
+                                    <td>
+                                        <span th:if="${orderItem.order.status.name() == 'PENDING'}"
+                                            class="badge bg-warning text-dark">Pending</span>
+                                        <span th:if="${orderItem.order.status.name() == 'PROCESSING'}"
+                                            class="badge bg-info text-dark">Processing</span>
+                                        <span th:if="${orderItem.order.status.name() == 'SHIPPED'}"
+                                            class="badge bg-primary">Shipped</span>
+                                        <span th:if="${orderItem.order.status.name() == 'DELIVERED'}"
+                                            class="badge bg-success">Delivered</span>
+                                        <span th:if="${orderItem.order.status.name() == 'CANCELLED'}"
+                                            class="badge bg-danger">Cancelled</span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${recentOrderItems == null or recentOrderItems.isEmpty()}">
+                                    <td colspan="6" class="text-center py-4 text-secondary">
+                                        No recent orders found.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications / Quick Actions -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-header bg-dark text-white border-bottom py-3 rounded-top-4">
+                        <h5 class="mb-0 fw-bold"><i class="fa-regular fa-bell me-2"></i>Notifications</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush border-0">
+                            <div th:each="notification : ${notifications}"
+                                class="list-group-item p-3 border-bottom d-flex align-items-start gap-3"
+                                th:classappend="${!notification.isRead} ? 'bg-light' : ''">
+                                <div class="text-primary mt-1"><i class="fa-solid fa-circle-info"></i></div>
+                                <div>
+                                    <p class="mb-1 text-dark" th:text="${notification.message}">Notification message</p>
+                                    <small class="text-secondary"
+                                        th:text="${#temporals.format(notification.createdAt, 'MMM dd, HH:mm')}">Date
+                                        Time</small>
+                                </div>
+                            </div>
+                            <div th:if="${notifications == null or notifications.isEmpty()}"
+                                class="p-4 text-center text-secondary">
+                                You're all caught up!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

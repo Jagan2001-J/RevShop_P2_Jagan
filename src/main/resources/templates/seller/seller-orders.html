@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/base :: layout('Manage Orders - RevShop', ~{::section})}">
+
+<head></head>
+
+<body>
+    <section class="container py-4">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <div>
+                <h2 class="fw-bold text-dark mb-0"><i class="fa-solid fa-clipboard-list me-3 text-warning"></i>Manage
+                    Orders</h2>
+                <p class="text-secondary small mt-1">View and update customer order statuses.</p>
+            </div>
+            <div>
+                <a th:href="@{/seller/dashboard}"
+                    class="btn btn-outline-secondary rounded-pill px-4 shadow-sm fw-bold">Back to Dashboard</a>
+            </div>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div th:if="${msg}" class="alert alert-success shadow-sm mb-4"><i
+                class="fa-solid fa-circle-check me-2"></i><span th:text="${msg}"></span></div>
+        <div th:if="${error}" class="alert alert-danger shadow-sm mb-4"><i
+                class="fa-solid fa-circle-exclamation me-2"></i><span th:text="${error}"></span></div>
+
+        <!-- Orders Filter Tabs (Mocked functionally via server or UI) -->
+        <ul class="nav nav-tabs mb-4 border-0">
+            <li class="nav-item">
+                <a class="nav-link border-0 text-dark fw-bold position-relative active" href="#"
+                    style="background: transparent;">
+                    All Orders
+                    <span class="position-absolute bottom-0 start-50 translate-middle-x bg-primary rounded-top"
+                        style="width: 50%; height: 3px;"></span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link border-0 text-secondary custom-hover" href="#">Pending processing</a>
+            </li>
+        </ul>
+
+        <!-- Orders Accordion List -->
+        <div class="accordion shadow-sm" id="ordersAccordion">
+            <div th:if="${sellerOrderItems == null or sellerOrderItems.isEmpty()}"
+                class="card border-0 rounded-4 text-center py-5 bg-white">
+                <div class="card-body">
+                    <i class="fa-solid fa-truck-ramp-box fs-1 text-secondary opacity-50 mb-3"
+                        style="font-size: 5rem !important;"></i>
+                    <h5 class="fw-bold text-dark">No orders yet</h5>
+                    <p class="text-secondary mb-0">When customers buy your products, the orders will appear here.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item border-0 outline-0 mb-3 rounded-4 bg-white overflow-hidden"
+                th:each="orderItem, iterStat : ${sellerOrderItems}">
+                <h2 class="accordion-header" th:id="'heading' + ${iterStat.index}">
+                    <button class="accordion-button collapsed bg-white border-bottom shadow-none" type="button"
+                        data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${iterStat.index}"
+                        aria-expanded="false" th:aria-controls="'collapse' + ${iterStat.index}">
+                        <div class="d-flex w-100 justify-content-between align-items-center pe-3 flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-3">
+                                <img th:src="${orderItem.product.imageUrl != null ? orderItem.product.imageUrl : 'https://dummyimage.com/60x60/dee2e6/6c757d.jpg&text=No+Image'}"
+                                    class="rounded shadow-sm" style="width: 60px; height: 60px; object-fit: cover;"
+                                    alt="Image">
+                                <div>
+                                    <h6 class="mb-0 fw-bold text-dark text-truncate" style="max-width: 200px;"
+                                        th:text="${orderItem.product.name}">Product Name</h6>
+                                    <p class="mb-0 small text-secondary">Qty: <strong
+                                            th:text="${orderItem.quantity}">1</strong> | Total: <strong
+                                            th:text="'Rs.' + (${orderItem.price} * ${orderItem.quantity})">Rs.100</strong>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="text-md-end text-start">
+                                <span class="d-block small text-secondary">Order <strong
+                                        th:text="'#' + ${orderItem.order.id}">#123</strong></span>
+                                <span class="d-block small text-secondary"
+                                    th:text="${#temporals.format(orderItem.order.createdAt, 'MMM dd, yyyy HH:mm')}">Date</span>
+                            </div>
+                            <div>
+                                <!-- Status View -->
+                                <span th:if="${orderItem.order.status.name() == 'PENDING'}"
+                                    class="badge bg-warning text-dark px-3 py-2 rounded-pill"><i
+                                        class="fa-solid fa-clock me-1"></i> Pending</span>
+                                <span th:if="${orderItem.order.status.name() == 'PROCESSING'}"
+                                    class="badge bg-info text-dark px-3 py-2 rounded-pill"><i
+                                        class="fa-solid fa-spinner fa-spin me-1"></i> Processing</span>
+                                <span th:if="${orderItem.order.status.name() == 'SHIPPED'}"
+                                    class="badge bg-primary px-3 py-2 rounded-pill"><i
+                                        class="fa-solid fa-truck-fast me-1"></i> Shipped</span>
+                                <span th:if="${orderItem.order.status.name() == 'DELIVERED'}"
+                                    class="badge bg-success px-3 py-2 rounded-pill"><i
+                                        class="fa-solid fa-check-double me-1"></i> Delivered</span>
+                                <span th:if="${orderItem.order.status.name() == 'CANCELLED'}"
+                                    class="badge bg-danger px-3 py-2 rounded-pill"><i class="fa-solid fa-ban me-1"></i>
+                                    Cancelled</span>
+                            </div>
+                        </div>
+                    </button>
+                </h2>
+                <div th:id="'collapse' + ${iterStat.index}" class="accordion-collapse collapse"
+                    th:aria-labelledby="'heading' + ${iterStat.index}" data-bs-parent="#ordersAccordion">
+                    <div class="accordion-body bg-light p-4">
+                        <div class="row g-4">
+                            <div class="col-md-6 border-end">
+                                <h6 class="fw-bold text-secondary text-uppercase small mb-3">Customer Details</h6>
+                                <p class="mb-1"><i class="fa-regular fa-user me-2 text-primary"></i> <strong
+                                        th:text="${orderItem.order.user.name}">John Doe</strong></p>
+                                <p class="mb-1"><i class="fa-regular fa-envelope me-2 text-primary"></i> <a
+                                        th:href="'mailto:' + ${orderItem.order.user.email}" class="text-decoration-none"
+                                        th:text="${orderItem.order.user.email}">john@example.com</a></p>
+                                <p class="mb-0"><i class="fa-solid fa-phone me-2 text-primary"></i> <span
+                                        th:text="${orderItem.order.user.phone}">+1 234 567 890</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="fw-bold text-secondary text-uppercase small mb-3">Shipping Address & Payment
+                                </h6>
+                                <p class="mb-1" th:text="${orderItem.order.shippingAddress.street}">123 Street</p>
+                                <p class="mb-2"
+                                    th:text="${orderItem.order.shippingAddress.city} + ', ' + ${orderItem.order.shippingAddress.state} + ' ' + ${orderItem.order.shippingAddress.zipCode}">
+                                    City</p>
+                                <p class="mb-0"><span class="badge bg-secondary">Payment via <th:block
+                                            th:text="${orderItem.order.payment.paymentMethod}"></th:block></span></p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top text-end d-flex justify-content-end align-items-center gap-3">
+                            <span class="fw-bold text-dark">Update Order Status:</span>
+                            <form th:action="@{/seller/order/updateStatus}" method="post"
+                                class="d-flex align-items-center gap-2">
+                                <input type="hidden" name="orderId" th:value="${orderItem.order.id}" />
+                                <select name="status" class="form-select form-select-sm border-secondary shadow-sm"
+                                    style="width: 150px;">
+                                    <option value="PENDING" th:selected="${orderItem.order.status.name() == 'PENDING'}">
+                                        Pending</option>
+                                    <option value="PROCESSING"
+                                        th:selected="${orderItem.order.status.name() == 'PROCESSING'}">Processing
+                                    </option>
+                                    <option value="SHIPPED" th:selected="${orderItem.order.status.name() == 'SHIPPED'}">
+                                        Shipped</option>
+                                    <option value="DELIVERED"
+                                        th:selected="${orderItem.order.status.name() == 'DELIVERED'}">Delivered</option>
+                                    <option value="CANCELLED"
+                                        th:selected="${orderItem.order.status.name() == 'CANCELLED'}">Cancelled</option>
+                                </select>
+                                <button type="submit"
+                                    class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm fw-bold">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+    <footer th:fragment="footer" class="bg-dark text-light py-4 mt-auto">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3"><i class="fa-solid fa-cart-shopping me-2 text-warning"></i>RevShop</h5>
+                    <p class="text-secondary small">Your ultimate destination for premium products. Delivering happiness
+                        across India with speed and reliability.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <ul class="list-unstyled text-secondary">
+                        <li><a th:href="@{/}" class="text-decoration-none text-secondary custom-hover">Home</a></li>
+                        <li><a th:href="@{/products}"
+                                class="text-decoration-none text-secondary custom-hover">Catalog</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary custom-hover">Terms & Conditions</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="mb-3">Connect With Us</h5>
+                    <div class="d-flex gap-3 fs-5">
+                        <a href="#" class="text-light custom-hover"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" class="text-light custom-hover"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="text-light custom-hover"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="text-light custom-hover"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <div class="text-center text-secondary small">
+                &copy; 2026 Developed by Jagan Mohan Reddy. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/base :: layout('Manage Product - RevShop', ~{::section})}">
+
+<head></head>
+
+<body>
+    <section class="container py-4">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <div>
+                <h2 class="fw-bold text-dark mb-0"><i class="fa-solid fa-box-open me-3 text-primary"></i><span
+                        th:text="${product.id == null ? 'Add New Product' : 'Edit Product'}">Manage Product</span></h2>
+                <p class="text-secondary small mt-1"
+                    th:text="${product.id == null ? 'Create a new product listing.' : 'Update the details of your existing product.'}">
+                </p>
+            </div>
+            <div>
+                <a th:href="@{/seller/inventory}"
+                    class="btn btn-outline-secondary rounded-pill px-4 shadow-sm fw-bold">Cancel</a>
+            </div>
+        </div>
+
+        <!-- Error Messages -->
+        <div th:if="${error}" class="alert alert-danger shadow-sm mb-4"><i
+                class="fa-solid fa-circle-exclamation me-2"></i><span th:text="${error}"></span></div>
+
+        <!-- Product Form -->
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4 p-md-5 bg-white">
+                        <form th:action="@{${product.id == null ? '/seller/product/add' : '/seller/product/update'}}"
+                            method="post" th:object="${product}">
+
+                            <input type="hidden" th:field="*{id}" />
+
+                            <div class="row g-4 mb-4">
+                                <!-- Basic Info -->
+                                <div class="col-md-8">
+                                    <h5 class="fw-bold mb-3 border-bottom pb-2">Basic Information</h5>
+
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label fw-bold text-dark small">Product Name <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="name" th:field="*{name}" required
+                                            placeholder="e.g., Wireless Bluetooth Headphones">
+                                        <div class="form-text text-secondary mt-1">Include keywords that buyers would
+                                            use to search for your item.</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label fw-bold text-dark small">Description
+                                            <span class="text-danger">*</span></label>
+                                        <textarea class="form-control" id="description" th:field="*{description}"
+                                            rows="5" required
+                                            placeholder="Describe the product features, specifications, and benefits..."></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Category and Image -->
+                                <div class="col-md-4">
+                                    <h5 class="fw-bold mb-3 border-bottom pb-2">Organization</h5>
+
+                                    <div class="mb-3">
+                                        <label for="category" class="form-label fw-bold text-dark small">Category <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-select" id="category" name="categoryName" required>
+                                            <option value="" disabled th:selected="${product.category == null}">Select a
+                                                Category</option>
+                                            <option th:each="cat : ${categories}" th:value="${cat.name()}"
+                                                th:text="${cat.name()}"
+                                                th:selected="${product.category != null and product.category == cat}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3 mt-4">
+                                        <label for="imageUrl" class="form-label fw-bold text-dark small">Image URL <span
+                                                class="text-danger">*</span></label>
+                                        <input type="url" class="form-control" id="imageUrl" th:field="*{imageUrl}"
+                                            required placeholder="https://example.com/image.jpg">
+                                        <div class="mt-2 text-center bg-light border rounded p-2"
+                                            style="height: 150px;">
+                                            <img th:if="${product.imageUrl != null and !product.imageUrl.isEmpty()}"
+                                                th:src="${product.imageUrl}" class="img-fluid h-100 object-fit-contain"
+                                                alt="Preview" id="imagePreview">
+                                            <div th:unless="${product.imageUrl != null and !product.imageUrl.isEmpty()}"
+                                                class="d-flex flex-column align-items-center justify-content-center h-100 text-secondary">
+                                                <i class="fa-regular fa-image fs-1 mb-2"></i>
+                                                <span class="small">Image Preview</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pricing and Inventory -->
+                            <div class="row g-4 mb-5">
+                                <div class="col-12">
+                                    <h5 class="fw-bold mb-3 border-bottom pb-2">Pricing & Inventory</h5>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="price" class="form-label fw-bold text-dark small">Regular Price (Rs.)
+                                        <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">Rs.</span>
+                                        <input type="number" class="form-control" id="price" th:field="*{price}"
+                                            step="0.01" min="0" required placeholder="0.00">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="discountedPrice" class="form-label fw-bold text-dark small">Sale Price
+                                        (Rs.)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">Rs.</span>
+                                        <input type="number" class="form-control" id="discountedPrice"
+                                            th:field="*{discountedPrice}" step="0.01" min="0" placeholder="0.00">
+                                    </div>
+                                    <div class="form-text text-secondary mt-1">Leave blank for no discount.</div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="quantity" class="form-label fw-bold text-dark small">Stock Quantity
+                                        <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="quantity" th:field="*{quantity}"
+                                        min="0" required placeholder="0">
+                                </div>
+                            </div>
+
+                            <!-- Submit -->
+                            <div class="text-end border-top pt-4">
+                                <button type="submit"
+                                    class="btn btn-primary rounded-pill px-5 py-2 shadow-sm fw-bold fs-5">
+                                    <i class="fa-solid fa-save me-2"></i> <span
+                                        th:text="${product.id == null ? 'Publish Product' : 'Save Changes'}"></span>
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simple Script for Image Preview -->
+    <script>
+        document.getElementById('imageUrl').addEventListener('input', function (e) {
+            var url = e.target.value;
+            var container = document.querySelector('.mt-2.text-center');
+            if (url) {
+                container.innerHTML = '<img src="' + url + '" class="img-fluid h-100 object-fit-contain" alt="Preview">';
+            } else {
+                container.innerHTML = '<div class="d-flex flex-column align-items-center justify-content-center h-100 text-secondary"><i class="fa-regular fa-image fs-1 mb-2"></i><span class="small">Image Preview</span></div>';
+            }
+        });
+    </script>
+</body>
+
+</html>

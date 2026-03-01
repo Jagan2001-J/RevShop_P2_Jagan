@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/base :: layout('Checkout - RevShop', ~{::section})}">
+
+<head></head>
+
+<body>
+    <section class="container py-4">
+        <div class="d-flex align-items-center mb-4 text-center justify-content-center">
+            <i class="fa-solid fa-lock fs-3 text-secondary me-2"></i>
+            <h2 class="fw-bold text-dark mb-0">Secure Checkout</h2>
+        </div>
+
+        <!-- Error/Success Messages -->
+        <div th:if="${error}" class="alert alert-danger shadow-sm"><i
+                class="fa-solid fa-circle-exclamation me-2"></i><span th:text="${error}"></span></div>
+
+        <form th:action="@{/checkout/process}" method="post">
+            <div class="row g-4">
+
+                <div class="col-lg-8">
+                    <!-- Shipping Address Section -->
+                    <div class="card border-0 shadow-sm rounded-4 mb-4">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h4 class="mb-0 fw-bold"><span class="badge bg-primary rounded-circle me-2">1</span>Shipping
+                                Address</h4>
+                        </div>
+                        <div class="card-body p-4 bg-light">
+                            <div th:if="${addresses != null and !addresses.isEmpty()}">
+                                <div class="row g-3">
+                                    <div class="col-md-6" th:each="address : ${addresses}">
+                                        <div
+                                            class="card h-100 border-primary shadow-sm position-relative cursor-pointer">
+                                            <div class="card-body">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="shippingAddressId" th:id="'ship_'+${address.id}"
+                                                        th:value="${address.id}" required
+                                                        th:checked="${addressStat.first}">
+                                                    <label class="form-check-label w-100"
+                                                        th:for="'ship_'+${address.id}">
+                                                        <strong>Home Default</strong><br>
+                                                        <span th:text="${address.street}"></span><br>
+                                                        <span
+                                                            th:text="${address.city} + ', ' + ${address.state} + ' ' + ${address.zipCode}"></span><br>
+                                                        <span th:text="${address.country}"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:if="${addresses == null or addresses.isEmpty()}" class="alert alert-warning mb-0">
+                                No saved addresses found. Please <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#addAddressModal">add an address</a> to proceed.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Billing Address Section -->
+                    <div class="card border-0 shadow-sm rounded-4 mb-4"
+                        th:if="${addresses != null and !addresses.isEmpty()}">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h4 class="mb-0 fw-bold"><span class="badge bg-primary rounded-circle me-2">2</span>Billing
+                                Address</h4>
+                        </div>
+                        <div class="card-body p-4 bg-light">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="sameAsShipping" checked
+                                    onchange="toggleBilling(this)">
+                                <label class="form-check-label text-dark fw-bold" for="sameAsShipping">
+                                    Same as shipping address
+                                </label>
+                            </div>
+
+                            <div id="billingAddressSection" style="display: none;">
+                                <div class="row g-3">
+                                    <div class="col-md-6" th:each="address : ${addresses}">
+                                        <div class="card h-100 border-secondary shadow-sm">
+                                            <div class="card-body">
+                                                <div class="form-check">
+                                                    <input class="form-check-input billing-radio" type="radio"
+                                                        name="billingAddressId" th:id="'bill_'+${address.id}"
+                                                        th:value="${address.id}" th:checked="${addressStat.first}">
+                                                    <label class="form-check-label w-100"
+                                                        th:for="'bill_'+${address.id}">
+                                                        <span th:text="${address.street}"></span><br>
+                                                        <span
+                                                            th:text="${address.city} + ', ' + ${address.state} + ' ' + ${address.zipCode}"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method Section -->
+                    <div class="card border-0 shadow-sm rounded-4"
+                        th:if="${addresses != null and !addresses.isEmpty()}">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h4 class="mb-0 fw-bold"><span class="badge bg-primary rounded-circle me-2">3</span>Payment
+                                Method</h4>
+                        </div>
+                        <div class="card-body p-4 bg-light">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="card border border-primary h-100 p-3 text-center shadow-sm">
+                                        <div
+                                            class="form-check d-flex flex-column align-items-center justify-content-center p-0">
+                                            <input class="form-check-input d-none" type="radio" name="paymentMethod"
+                                                id="ccCard" value="CREDIT_CARD" required>
+                                            <label class="form-check-label p-2 w-100 cursor-pointer" for="ccCard">
+                                                <i class="fa-regular fa-credit-card fs-1 text-primary mb-2"></i>
+                                                <h6 class="fw-bold m-0">Credit Card</h6>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card border border-secondary h-100 p-3 text-center shadow-sm">
+                                        <div
+                                            class="form-check d-flex flex-column align-items-center justify-content-center p-0">
+                                            <input class="form-check-input d-none" type="radio" name="paymentMethod"
+                                                id="dbCard" value="DEBIT_CARD" required>
+                                            <label class="form-check-label p-2 w-100 cursor-pointer" for="dbCard">
+                                                <i class="fa-solid fa-building-columns fs-1 text-secondary mb-2"></i>
+                                                <h6 class="fw-bold m-0 text-dark">Debit Card</h6>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card border border-secondary h-100 p-3 text-center shadow-sm">
+                                        <div
+                                            class="form-check d-flex flex-column align-items-center justify-content-center p-0">
+                                            <input class="form-check-input d-none" type="radio" name="paymentMethod"
+                                                id="cod" value="COD" required>
+                                            <label class="form-check-label p-2 w-100 cursor-pointer" for="cod">
+                                                <i class="fa-solid fa-money-bill-wave fs-1 text-success mb-2"></i>
+                                                <h6 class="fw-bold m-0 text-dark">Cash on Delivery</h6>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Review Sidebar -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm rounded-4 position-sticky" style="top: 100px;">
+                        <div class="card-header bg-dark text-white border-bottom py-3 rounded-top-4">
+                            <h5 class="mb-0 fw-bold">Order Review</h5>
+                        </div>
+                        <div class="card-body p-4 bg-light">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Items (<span th:text="${cart.items.size()}">0</span>):</span>
+                                <span th:text="'Rs.' + ${subtotal}">Rs.0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Shipping & handling:</span>
+                                <span class="text-success fw-bold">Free</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 text-secondary">
+                                <span>Total before tax:</span>
+                                <span th:text="'Rs.' + ${subtotal}">Rs.0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-4 mt-2">
+                                <span class="fw-bold fs-4 text-dark">Order Total:</span>
+                                <span class="fw-bold fs-4 text-danger" th:text="'Rs.' + ${total}">Rs.0.00</span>
+                            </div>
+
+                            <button type="submit"
+                                class="btn btn-warning w-100 py-3 fw-bold rounded-pill text-dark shadow fs-5"
+                                th:disabled="${addresses == null or addresses.isEmpty()}">
+                                Place your order <i class="fa-solid fa-lock ms-2"></i>
+                            </button>
+                            <p class="text-center text-secondary small mt-3">By placing your order, you agree to
+                                RevShop's privacy notice and conditions of use.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+        <!-- Simple Script for Billing toggle -->
+        <script>
+            function toggleBilling(checkbox) {
+                var billingSection = document.getElementById('billingAddressSection');
+                var billingRadios = document.querySelectorAll('.billing-radio');
+
+                if (checkbox.checked) {
+                    if (billingSection) billingSection.style.display = 'none';
+                    billingRadios.forEach(r => r.removeAttribute('name'));
+                } else {
+                    if (billingSection) billingSection.style.display = 'block';
+                    billingRadios.forEach(r => r.setAttribute('name', 'billingAddressId'));
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                var checkbox = document.getElementById('sameAsShipping');
+                if (checkbox) toggleBilling(checkbox);
+            });
+        </script>
+
+        <!-- Add Address Modal -->
+        <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow rounded-4">
+                    <div class="modal-header bg-primary text-white rounded-top-4 border-0">
+                        <h5 class="modal-title fw-bold" id="addAddressModalLabel"><i
+                                class="fa-solid fa-location-dot me-2"></i>Add New Address</h5>
+                        <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <form th:action="@{/address/add}" method="post">
+                        <div class="modal-body p-4">
+                            <div class="mb-3">
+                                <label for="street" class="form-label fw-bold small text-secondary">Street
+                                    Address</label>
+                                <input type="text" class="form-control rounded-3" id="street" name="street" required
+                                    placeholder="123 Main St">
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6 mb-3">
+                                    <label for="city" class="form-label fw-bold small text-secondary">City</label>
+                                    <input type="text" class="form-control rounded-3" id="city" name="city" required
+                                        placeholder="New York">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="state" class="form-label fw-bold small text-secondary">State</label>
+                                    <input type="text" class="form-control rounded-3" id="state" name="state" required
+                                        placeholder="NY">
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6 mb-3">
+                                    <label for="zipCode" class="form-label fw-bold small text-secondary">Zip
+                                        Code</label>
+                                    <input type="text" class="form-control rounded-3" id="zipCode" name="zipCode"
+                                        required placeholder="10001">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="country" class="form-label fw-bold small text-secondary">Country</label>
+                                    <input type="text" class="form-control rounded-3" id="country" name="country"
+                                        required placeholder="USA">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 p-4 pt-0">
+                            <button type="button" class="btn btn-light rounded-pill px-4"
+                                data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold">Save
+                                Address</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

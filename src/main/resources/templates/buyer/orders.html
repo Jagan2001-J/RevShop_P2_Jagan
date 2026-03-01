@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/base :: layout('My Orders - RevShop', ~{::section})}">
+
+<head></head>
+
+<body>
+    <section class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark mb-0"><i class="fa-solid fa-box-open me-3 text-primary"></i>Your Orders</h2>
+            <a th:href="@{/products}" class="btn btn-outline-primary rounded-pill px-4">Continue Shopping</a>
+        </div>
+
+        <!-- Empty State -->
+        <div th:if="${orders == null or orders.isEmpty()}"
+            class="text-center py-5 bg-white rounded-4 shadow-sm border mt-4">
+            <i class="fa-solid fa-receipt fs-1 text-secondary mb-3 opacity-50" style="font-size: 5rem !important;"></i>
+            <h3 class="fw-bold text-dark">No orders yet</h3>
+            <p class="text-secondary mb-4">You have not placed any orders. Start browsing our catalog to find premium
+                products.</p>
+        </div>
+
+        <!-- Orders List -->
+        <div th:if="${orders != null and !orders.isEmpty()}" class="row g-4">
+            <div class="col-12" th:each="order : ${orders}">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
+
+                    <!-- Order Header -->
+                    <div
+                        class="card-header bg-light border-bottom p-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div class="d-flex gap-4 flex-wrap">
+                            <div>
+                                <span class="text-secondary small d-block text-uppercase">Order Placed</span>
+                                <span class="text-dark fw-bold"
+                                    th:text="${#temporals.format(order.createdAt, 'dd MMMM yyyy, HH:mm')}">Date</span>
+                            </div>
+                            <div>
+                                <span class="text-secondary small d-block text-uppercase">Total Amount</span>
+                                <span class="text-dark fw-bold" th:text="'Rs.' + ${order.totalAmount}">Rs.0.00</span>
+                            </div>
+                            <div>
+                                <span class="text-secondary small d-block text-uppercase">Ship To</span>
+                                <a href="#" class="text-decoration-none custom-hover fw-bold"
+                                    th:text="${session.user.name}">Buyer Name</a>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <span class="text-secondary small d-block text-uppercase mb-1">Order #<span
+                                    th:text="${order.id}"></span></span>
+
+                            <!-- Status Badge -->
+                            <span th:if="${order.status.name() == 'PENDING'}"
+                                class="badge bg-warning text-dark rounded-pill px-3 py-2"><i
+                                    class="fa-solid fa-clock me-1"></i> Pending</span>
+                            <span th:if="${order.status.name() == 'PROCESSING'}"
+                                class="badge bg-info text-dark rounded-pill px-3 py-2"><i
+                                    class="fa-solid fa-spinner fa-spin me-1"></i> Processing</span>
+                            <span th:if="${order.status.name() == 'SHIPPED'}"
+                                class="badge bg-primary rounded-pill px-3 py-2"><i
+                                    class="fa-solid fa-truck-fast me-1"></i> Shipped</span>
+                            <span th:if="${order.status.name() == 'DELIVERED'}"
+                                class="badge bg-success rounded-pill px-3 py-2"><i
+                                    class="fa-solid fa-check-double me-1"></i> Delivered</span>
+                            <span th:if="${order.status.name() == 'CANCELLED'}"
+                                class="badge bg-danger rounded-pill px-3 py-2"><i class="fa-solid fa-ban me-1"></i>
+                                Cancelled</span>
+                        </div>
+                    </div>
+
+                    <!-- Order Body (Items) -->
+                    <div class="card-body p-4 bg-white">
+                        <h5 class="fw-bold mb-3 text-success" th:if="${order.status.name() == 'DELIVERED'}">Delivered
+                            successfully</h5>
+                        <h5 class="fw-bold mb-3 text-primary" th:if="${order.status.name() == 'SHIPPED'}">Arriving soon
+                        </h5>
+
+                        <!-- We assume OrderService/Controller provides items along with orders -->
+                        <div class="row align-items-center mb-3 border-bottom pb-3"
+                            th:each="item : ${orderItemsMap[order.id]}">
+                            <div class="col-md-2 col-4">
+                                <img th:src="${item.product.imageUrl != null ? item.product.imageUrl : 'https://dummyimage.com/150x150/dee2e6/6c757d.jpg&text=No+Image'}"
+                                    class="img-fluid rounded shadow-sm" alt="Product Image">
+                            </div>
+                            <div class="col-md-7 col-8">
+                                <a th:href="@{/product/{id}(id=${item.product.id})}"
+                                    class="text-decoration-none text-dark fw-bold fs-5 mb-1 d-block custom-hover"
+                                    th:text="${item.product.name}">Product Name</a>
+                                <p class="text-secondary small mb-1">Sold by: <span
+                                        th:text="${item.product.seller.name}">Seller</span></p>
+                                <p class="text-dark mb-0 fw-bold">
+                                    <span th:text="'Rs.' + ${item.price}">Rs.0.00</span>
+                                    <span class="text-secondary small ms-1"
+                                        th:text="'(Qty: ' + ${item.quantity} + ')'"></span>
+                                </p>
+                            </div>
+                            <div class="col-md-3 mt-3 mt-md-0 d-flex flex-column gap-2 text-md-end">
+                                <a th:href="@{/product/{id}(id=${item.product.id})}"
+                                    class="btn btn-outline-primary btn-sm rounded-pill mx-md-auto w-100">Buy it
+                                    again</a>
+                                <a th:href="@{/product/{id}#reviews(id=${item.product.id})}"
+                                    class="btn btn-light btn-sm rounded-pill border mx-md-auto w-100"
+                                    th:if="${order.status.name() == 'DELIVERED'}">Write a product review</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

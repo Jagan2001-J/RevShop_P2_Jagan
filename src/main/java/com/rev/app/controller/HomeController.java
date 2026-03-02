@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class HomeController {
 
     @Autowired
@@ -18,11 +21,13 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(Model model) {
+        log.debug("Loading home page with featured products.");
         // Fetch featured products (for now, simply grab the latest 4 products or random
         // ones)
         List<Product> allProducts = productService.getAllProducts();
         List<Product> featuredProducts = allProducts.stream().limit(8).collect(Collectors.toList());
 
+        log.debug("Fetched {} total products, rendering {} as featured.", allProducts.size(), featuredProducts.size());
         model.addAttribute("categories", Product.Category.values());
         model.addAttribute("featuredProducts", featuredProducts);
 

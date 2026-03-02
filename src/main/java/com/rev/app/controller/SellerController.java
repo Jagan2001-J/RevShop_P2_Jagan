@@ -14,9 +14,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/seller")
+@Slf4j
 public class SellerController {
 
     @Autowired
@@ -34,6 +36,7 @@ public class SellerController {
         if (!isSeller(session))
             return "redirect:/login";
         User seller = (User) session.getAttribute("user");
+        log.info("Seller {} loaded dashboard.", seller.getEmail());
 
         List<Product> products = productService.getProductsBySeller(seller.getId());
         model.addAttribute("totalProducts", products.size());
@@ -77,6 +80,7 @@ public class SellerController {
         if (!isSeller(session))
             return "redirect:/login";
         User seller = (User) session.getAttribute("user");
+        log.info("Seller {} accessed inventory page.", seller.getEmail());
 
         List<Product> products = productService.getProductsBySeller(seller.getId());
         model.addAttribute("products", products);
@@ -100,6 +104,7 @@ public class SellerController {
         if (!isSeller(session))
             return "redirect:/login";
         User seller = (User) session.getAttribute("user");
+        log.info("Seller {} is adding a new product: {}", seller.getEmail(), product.getName());
 
         try {
             product.setCategory(Product.Category.valueOf(categoryName));
@@ -109,8 +114,10 @@ public class SellerController {
             product.setUpdatedAt(LocalDateTime.now());
 
             productService.addProduct(product);
+            log.info("Product {} added successfully by {}", product.getName(), seller.getEmail());
             redirectAttributes.addFlashAttribute("msg", "Product added successfully!");
         } catch (Exception e) {
+            log.error("Failed to add product {}: {}", product.getName(), e.getMessage());
             redirectAttributes.addFlashAttribute("error", "Failed to add product: " + e.getMessage());
         }
         return "redirect:/seller/inventory";
@@ -125,6 +132,7 @@ public class SellerController {
 
         Product product = productService.getProductById(id);
         if (!product.getSeller().getId().equals(seller.getId())) {
+            log.warn("Seller {} attempted unauthorized edit of product {}", seller.getEmail(), id);
             redirectAttributes.addFlashAttribute("error", "Unauthorized to edit this product.");
             return "redirect:/seller/inventory";
         }
@@ -140,10 +148,12 @@ public class SellerController {
         if (!isSeller(session))
             return "redirect:/login";
         User seller = (User) session.getAttribute("user");
+        log.info("Seller {} updating product ID {}", seller.getEmail(), product.getId());
 
         try {
             Product existingProduct = productService.getProductById(product.getId());
             if (!existingProduct.getSeller().getId().equals(seller.getId())) {
+                log.warn("Unauthorized attempt by {} to update product {}", seller.getEmail(), product.getId());
                 throw new RuntimeException("Unauthorized");
             }
 

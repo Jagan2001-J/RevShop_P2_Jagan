@@ -13,9 +13,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/")
+@Slf4j
 public class BuyerController {
 
     @Autowired
@@ -39,6 +41,7 @@ public class BuyerController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String sort,
             Model model) {
+        log.info("Loading product catalog. Category filter: {}, Keyword search: {}", category, keyword);
         List<Product> products = productService.getAllProducts();
 
         if (category != null && !category.isEmpty()) {
@@ -120,13 +123,17 @@ public class BuyerController {
     public String addToCart(@RequestParam Long productId, @RequestParam int quantity,
             HttpSession session, RedirectAttributes redirectAttributes) {
         User user = (User) session.getAttribute("user");
-        if (user == null)
+        if (user == null) {
+            log.warn("Unauthenticated user attempted to add product {} to cart.", productId);
             return "redirect:/login";
+        }
 
+        log.info("User {} adding {} of product {} to cart.", user.getEmail(), quantity, productId);
         try {
             cartService.addToCart(user.getId(), productId, quantity);
             redirectAttributes.addFlashAttribute("msg", "Item added to cart.");
         } catch (Exception e) {
+            log.error("Failed to add product {} to cart for user {}: {}", productId, user.getEmail(), e.getMessage());
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/cart";
@@ -200,18 +207,24 @@ public class BuyerController {
             @RequestParam String paymentMethod,
             HttpSession session, RedirectAttributes redirectAttributes) {
         User user = (User) session.getAttribute("user");
-        if (user == null)
+        if (user == null) {
+            log.warn("Unauthenticated user attempted to process checkout.");
             return "redirect:/login";
+        }
 
+        log.info("User {} processing checkout payment {} to address {}", user.getEmail(), paymentMethod,
+                shippingAddressId);
         if (billingAddressId == null) {
             billingAddressId = shippingAddressId; // Same as shipping
         }
 
         try {
             orderService.placeOrder(user.getId(), shippingAddressId, billingAddressId, paymentMethod);
+            log.info("Order placed successfully by user {}", user.getEmail());
             redirectAttributes.addFlashAttribute("msg", "Order placed successfully!");
             return "redirect:/orders";
         } catch (Exception e) {
+            log.error("Failed to process checkout for user {}: {}", user.getEmail(), e.getMessage());
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/checkout";
         }

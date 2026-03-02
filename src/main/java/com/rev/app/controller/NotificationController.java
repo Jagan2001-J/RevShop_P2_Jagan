@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/notifications")
+@Slf4j
 public class NotificationController {
 
     @Autowired
@@ -25,9 +27,11 @@ public class NotificationController {
     public String viewNotifications(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
+            log.warn("Unauthenticated user attempted to view notifications.");
             return "redirect:/login";
         }
 
+        log.debug("Fetching notifications for user ID: {}", user.getId());
         List<Notification> notifications = notificationService.getNotificationsForUser(user.getId());
         model.addAttribute("notifications", notifications);
 
@@ -38,12 +42,15 @@ public class NotificationController {
     public String markAsRead(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
+            log.warn("Unauthenticated user attempted to mark notification {} as read.", id);
             return "redirect:/login";
         }
 
         try {
+            log.info("User ID {} marking notification {} as read.", user.getId(), id);
             notificationService.markAsRead(id);
         } catch (Exception e) {
+            log.error("Error marking notification {} as read for user {}: {}", id, user.getId(), e.getMessage());
             redirectAttributes.addFlashAttribute("error", "Error marking notification as read.");
         }
 

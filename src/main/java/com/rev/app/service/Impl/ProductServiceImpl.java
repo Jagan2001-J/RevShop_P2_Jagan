@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class ProductServiceImpl implements IProductService {
 
     @Autowired
@@ -16,21 +18,28 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public List<Product> getAllProducts() {
+        log.debug("Fetching all products from repository.");
         return repo.findAll();
     }
 
     @Override
     public Product getProductById(Long id) {
-        return repo.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        log.debug("Fetching product by ID: {}", id);
+        return repo.findById(id).orElseThrow(() -> {
+            log.warn("Product not found with ID: {}", id);
+            return new RuntimeException("Product not found");
+        });
     }
 
     @Override
     public Product addProduct(Product product) {
+        log.info("Adding new product: {}", product.getName());
         return repo.save(product);
     }
 
     @Override
     public Product updateProduct(Product product) {
+        log.info("Updating existing product ID: {}", product.getId());
         Product existing = getProductById(product.getId());
         existing.setName(product.getName());
         existing.setDescription(product.getDescription());

@@ -13,8 +13,10 @@ import com.rev.app.service.Interface.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class CartServiceImpl implements ICartService {
 
     @Autowired
@@ -29,9 +31,19 @@ public class CartServiceImpl implements ICartService {
     @Override
     @Transactional
     public void addToCart(Long userId, Long productId, Integer qty) {
-        User u = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        Cart cart = cartRepo.findByUser(u).orElseGet(() -> cartRepo.save(Cart.builder().user(u).build()));
-        Product p = productRepo.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
+        log.info("Adding {} of product {} to cart for user {}", qty, productId, userId);
+        User u = userRepo.findById(userId).orElseThrow(() -> {
+            log.warn("User {} not found when adding to cart.", userId);
+            return new RuntimeException("User not found");
+        });
+        Cart cart = cartRepo.findByUser(u).orElseGet(() -> {
+            log.debug("Creating new cart for user {}", userId);
+            return cartRepo.save(Cart.builder().user(u).build());
+        });
+        Product p = productRepo.findById(productId).orElseThrow(() -> {
+            log.warn("Product {} not found when adding to cart.", productId);
+            return new RuntimeException("Product not found");
+        });
 
         if (cart.getItems() == null) {
             cart.setItems(new java.util.ArrayList<>());
@@ -58,14 +70,22 @@ public class CartServiceImpl implements ICartService {
 
     @Override
     public Cart getCartByUserId(Long userId) {
-        User u = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        log.debug("Fetching cart for user {}", userId);
+        User u = userRepo.findById(userId).orElseThrow(() -> {
+            log.warn("User {} not found when fetching cart.", userId);
+            return new RuntimeException("User not found");
+        });
         return cartRepo.findByUser(u).orElse(null);
     }
 
     @Override
     @Transactional
     public void updateCartItemQuantity(Long cartItemId, Integer qty) {
-        CartItem item = itemRepo.findById(cartItemId).orElseThrow(() -> new RuntimeException("CartItem not found"));
+        log.info("Updating cart item {} to quantity {}", cartItemId, qty);
+        CartItem item = itemRepo.findById(cartItemId).orElseThrow(() -> {
+            log.warn("CartItem {} not found for update.", cartItemId);
+            return new RuntimeException("CartItem not found");
+        });
         if (qty <= 0) {
             removeCartItem(cartItemId);
         } else {
@@ -77,6 +97,7 @@ public class CartServiceImpl implements ICartService {
     @Override
     @Transactional
     public void removeCartItem(Long cartItemId) {
+        log.info("Removing cart item {}", cartItemId);
         CartItem item = itemRepo.findById(cartItemId).orElse(null);
         if (item != null) {
             Cart cart = item.getCart();
@@ -88,6 +109,7 @@ public class CartServiceImpl implements ICartService {
     @Override
     @Transactional
     public void clearCart(Long userId) {
+        log.info("Clearing cart for user {}", userId);
         Cart cart = getCartByUserId(userId);
         if (cart != null && cart.getItems() != null) {
             cart.getItems().clear();

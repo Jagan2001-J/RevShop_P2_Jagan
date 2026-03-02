@@ -9,8 +9,10 @@ import com.rev.app.repository.ISellerRepository;
 import com.rev.app.service.Interface.ISellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class SellerServiceImpl implements ISellerService {
 
     @Autowired
@@ -21,9 +23,10 @@ public class SellerServiceImpl implements ISellerService {
 
     @Override
     public SellerResponseDTO createSellerProfile(User user, RegisterRequestDTO request) {
-
+        log.info("Creating seller profile for user ID: {}", user.getId());
         // Ensure a user doesn't already have a seller profile
         if (sellerRepository.findByUser(user).isPresent()) {
+            log.warn("User ID {} already has a registered seller profile.", user.getId());
             throw new RuntimeException("User already has a registered seller profile");
         }
 
@@ -38,14 +41,19 @@ public class SellerServiceImpl implements ISellerService {
                 .build();
 
         Seller savedSeller = sellerRepository.save(seller);
+        log.debug("Saved new seller profile: {}", savedSeller.getBusinessName());
 
         return sellerMapper.toDto(savedSeller);
     }
 
     @Override
     public SellerResponseDTO getSellerProfile(User user) {
+        log.debug("Fetching seller profile for user ID: {}", user.getId());
         Seller seller = sellerRepository.findByUser(user)
-                .orElseThrow(() -> new RuntimeException("No seller profile found for this user"));
+                .orElseThrow(() -> {
+                    log.error("No seller profile found for user ID: {}", user.getId());
+                    return new RuntimeException("No seller profile found for this user");
+                });
 
         return sellerMapper.toDto(seller);
     }

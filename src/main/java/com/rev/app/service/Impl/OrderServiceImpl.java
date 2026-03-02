@@ -12,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements IOrderService {
 
     @Autowired
@@ -38,11 +40,19 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     @Transactional
     public Order placeOrder(Long userId, Long shippingAddressId, Long billingAddressId, String paymentMethodStr) {
-        User u = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        Cart cart = cartRepo.findByUser(u).orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
+        log.info("Processing order placement for user ID: {}", userId);
+        User u = userRepo.findById(userId).orElseThrow(() -> {
+            log.error("Failed to place order. User ID {} not found.", userId);
+            return new ResourceNotFoundException("User not found");
+        });
+        Cart cart = cartRepo.findByUser(u).orElseThrow(() -> {
+            log.error("Failed to place order. Cart missing for user ID {}.", userId);
+            return new ResourceNotFoundException("Cart not found");
+        });
         List<CartItem> cartItems = cartItemRepo.findByCart(cart);
 
         if (cartItems.isEmpty()) {
+            log.warn("Failed to place order. Cart is empty for user ID {}.", userId);
             throw new BadRequestException("Cart is empty");
         }
 
@@ -100,6 +110,7 @@ public class OrderServiceImpl implements IOrderService {
         // Mock transaction ID for non-COD
         if (pm != Payment.PaymentMethod.COD) {
             payment.setTransactionId("TXN-" + System.currentTimeMillis());
+            log.debug("Generated mock transaction ID {} for non-COD payment", payment.getTransactionId());
         }
 
         paymentRepo.save(payment);
@@ -122,17 +133,23 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public List<Order> getOrdersByUser(Long userId) {
+        log.debug("Fetching orders for user ID: {}", userId);
         User u = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return orderRepo.findByUserOrderByCreatedAtDesc(u);
     }
 
     @Override
     public Order getOrderById(Long orderId) {
-        return orderRepo.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        log.debug("Fetching order by ID: {}", orderId);
+        return orderRepo.findById(orderId).orElseThrow(() -> {
+            log.error("Failed to fetch. Order ID {} not found.", orderId);
+            return new ResourceNotFoundException("Order not found");
+        });
     }
 
     @Override
     public void updateOrderStatus(Long orderId, String status) {
+        log.info("Updating order ID {} to status {}", orderId, status);
         Order order = getOrderById(orderId);
         order.setStatus(Order.OrderStatus.valueOf(status.toUpperCase()));
         orderRepo.save(order);

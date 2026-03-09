@@ -49,6 +49,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- Add New Address Button Card -->
+                                    <div class="col-md-6">
+                                        <div class="card h-100 border-dashed border-2 text-center d-flex align-items-center justify-content-center cursor-pointer hover-shadow"
+                                            data-bs-toggle="modal" data-bs-target="#addAddressModal"
+                                            style="border: 2px dashed #dee2e6 !important; min-height: 120px; background: #f8f9fa;">
+                                            <div
+                                                class="card-body d-flex flex-column align-items-center justify-content-center">
+                                                <i class="fa-solid fa-plus fs-2 text-primary mb-2"></i>
+                                                <h6 class="fw-bold text-primary mb-0">Add New Address</h6>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div th:if="${addresses == null or addresses.isEmpty()}" class="alert alert-warning mb-0">
@@ -107,21 +119,23 @@
                         </div>
                         <div class="card-body p-4 bg-light">
                             <div class="row g-3">
-                                <div class="col-md-4">
-                                    <div class="card border border-primary h-100 p-3 text-center shadow-sm">
+                                <div class="col-md-3">
+                                    <div
+                                        class="card payment-card border border-secondary h-100 p-3 text-center shadow-sm">
                                         <div
                                             class="form-check d-flex flex-column align-items-center justify-content-center p-0">
                                             <input class="form-check-input d-none" type="radio" name="paymentMethod"
                                                 id="ccCard" value="CREDIT_CARD" required>
                                             <label class="form-check-label p-2 w-100 cursor-pointer" for="ccCard">
                                                 <i class="fa-regular fa-credit-card fs-1 text-primary mb-2"></i>
-                                                <h6 class="fw-bold m-0">Credit Card</h6>
+                                                <h6 class="fw-bold m-0 text-dark">Credit Card</h6>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="card border border-secondary h-100 p-3 text-center shadow-sm">
+                                <div class="col-md-3">
+                                    <div
+                                        class="card payment-card border border-secondary h-100 p-3 text-center shadow-sm">
                                         <div
                                             class="form-check d-flex flex-column align-items-center justify-content-center p-0">
                                             <input class="form-check-input d-none" type="radio" name="paymentMethod"
@@ -133,8 +147,23 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="card border border-secondary h-100 p-3 text-center shadow-sm">
+                                <div class="col-md-3">
+                                    <div
+                                        class="card payment-card border border-secondary h-100 p-3 text-center shadow-sm">
+                                        <div
+                                            class="form-check d-flex flex-column align-items-center justify-content-center p-0">
+                                            <input class="form-check-input d-none" type="radio" name="paymentMethod"
+                                                id="upi" value="UPI" required>
+                                            <label class="form-check-label p-2 w-100 cursor-pointer" for="upi">
+                                                <i class="fa-solid fa-mobile-screen-button fs-1 text-info mb-2"></i>
+                                                <h6 class="fw-bold m-0 text-dark">UPI</h6>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div
+                                        class="card payment-card border border-secondary h-100 p-3 text-center shadow-sm">
                                         <div
                                             class="form-check d-flex flex-column align-items-center justify-content-center p-0">
                                             <input class="form-check-input d-none" type="radio" name="paymentMethod"
@@ -146,6 +175,46 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Details Segment -->
+                    <div id="cardDetails" class="mt-4 p-4 bg-white rounded-4 shadow-sm" style="display: none;">
+                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-credit-card me-2"></i>Card Details</h6>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-secondary">Card Holder Name</label>
+                                <input type="text" id="cardHolderName" name="cardHolderName"
+                                    class="form-control rounded-3" placeholder="Full Name as on Card"
+                                    autocomplete="off">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-secondary">Card Number</label>
+                                <input type="text" id="cardNumber" name="cardNumber" class="form-control rounded-3"
+                                    placeholder="0000 0000 0000 0000" autocomplete="off">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">Expiry Date</label>
+                                <input type="text" id="expiryDate" name="expiryDate" class="form-control rounded-3"
+                                    placeholder="MM/YY" autocomplete="off">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-secondary">CVV</label>
+                                <input type="text" id="cvv" name="cvv" class="form-control rounded-3" placeholder="***"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UPI Details Segment -->
+                    <div id="upiDetails" class="mt-4 p-4 bg-white rounded-4 shadow-sm" style="display: none;">
+                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-mobile-screen-button me-2"></i>UPI Details</h6>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-secondary">UPI ID</label>
+                                <input type="text" id="upiId" name="upiId" class="form-control rounded-3"
+                                    placeholder="username@bank" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -207,6 +276,52 @@
             document.addEventListener('DOMContentLoaded', function () {
                 var checkbox = document.getElementById('sameAsShipping');
                 if (checkbox) toggleBilling(checkbox);
+
+                const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+
+                paymentRadios.forEach(radio => {
+                    radio.addEventListener('change', function () {
+                        // Reset all card styles
+                        document.querySelectorAll('.payment-card').forEach(card => {
+                            card.classList.remove('border-primary', 'shadow');
+                            card.classList.add('border-secondary');
+                        });
+
+                        // Highlight selected card
+                        const selectedCard = this.closest('.payment-card');
+                        if (selectedCard) {
+                            selectedCard.classList.remove('border-secondary');
+                            selectedCard.classList.add('border-primary', 'shadow');
+                        }
+
+                        // Sections
+                        const cardDetails = document.getElementById('cardDetails');
+                        const upiDetails = document.getElementById('upiDetails');
+
+                        // Card Inputs
+                        const cardInputs = cardDetails.querySelectorAll('input');
+                        // UPI Inputs
+                        const upiInputs = upiDetails.querySelectorAll('input');
+
+                        // Toggle visibility and required attributes
+                        if (this.value === 'CREDIT_CARD' || this.value === 'DEBIT_CARD') {
+                            cardDetails.style.display = 'block';
+                            upiDetails.style.display = 'none';
+                            cardInputs.forEach(input => input.setAttribute('required', 'required'));
+                            upiInputs.forEach(input => input.removeAttribute('required'));
+                        } else if (this.value === 'UPI') {
+                            cardDetails.style.display = 'none';
+                            upiDetails.style.display = 'block';
+                            cardInputs.forEach(input => input.removeAttribute('required'));
+                            upiInputs.forEach(input => input.setAttribute('required', 'required'));
+                        } else {
+                            cardDetails.style.display = 'none';
+                            upiDetails.style.display = 'none';
+                            cardInputs.forEach(input => input.removeAttribute('required'));
+                            upiInputs.forEach(input => input.removeAttribute('required'));
+                        }
+                    });
+                });
             });
         </script>
 

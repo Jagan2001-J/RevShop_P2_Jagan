@@ -1,0 +1,139 @@
+2026-03-04 10:29:01.932 [main] INFO  org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.rev.app.RevShopP2ApplicationTests]: RevShopP2ApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-04 10:29:02.049 [main] INFO  org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.rev.app.RevShopP2Application for test class com.rev.app.RevShopP2ApplicationTests
+2026-03-04 10:29:02.268 [main] INFO  org.springframework.boot.devtools.restart.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-04 10:29:02.512 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-03-04 10:29:02.536 [main] INFO  com.rev.app.RevShopP2ApplicationTests - Starting RevShopP2ApplicationTests using Java 21.0.10 with PID 11160 (started by Jagan Mohan Reddy in C:\RevShop_P2\RevShop_P2)
+2026-03-04 10:29:02.536 [main] DEBUG com.rev.app.RevShopP2ApplicationTests - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-03-04 10:29:02.536 [main] INFO  com.rev.app.RevShopP2ApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2026-03-04 10:29:03.683 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-04 10:29:03.790 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 97 ms. Found 13 JPA repository interfaces.
+2026-03-04 10:29:04.576 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-04 10:29:04.677 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-03-04 10:29:04.717 [main] INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-04 10:29:05.146 [main] INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-04 10:29:05.180 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-04 10:29:05.642 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@734cf881
+2026-03-04 10:29:05.644 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-04 10:29:07.159 [main] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-04 10:29:08.092 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-04 10:29:08.972 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-04 10:29:09.115 [main] INFO  org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-03-04 10:29:09.470 [main] INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@150963fe, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@280d20fb, org.springframework.security.web.context.SecurityContextHolderFilter@7b3db079, org.springframework.security.web.header.HeaderWriterFilter@4870d2e1, org.springframework.web.filter.CorsFilter@20c7a91d, org.springframework.security.web.authentication.logout.LogoutFilter@6bca3b27, com.rev.app.config.JwtAuthFilter@26f0ab88, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@14738629, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5b7e2a88, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6984f7d1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2048255a, org.springframework.security.web.session.SessionManagementFilter@61ee9672, org.springframework.security.web.access.ExceptionTranslationFilter@70b437bb, org.springframework.security.web.access.intercept.AuthorizationFilter@41ff98dc]
+2026-03-04 10:29:10.050 [main] INFO  com.rev.app.RevShopP2ApplicationTests - Started RevShopP2ApplicationTests in 7.794 seconds (process running for 9.859)
+2026-03-04 10:29:11.744 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-04 10:29:11.746 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-04 10:29:11.763 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-04 10:30:39.496 [main] INFO  org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.rev.app.controller.AuthControllerTest]: AuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-04 10:30:39.783 [main] INFO  org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.rev.app.RevShopP2Application for test class com.rev.app.controller.AuthControllerTest
+2026-03-04 10:30:39.960 [main] INFO  org.springframework.boot.devtools.restart.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-04 10:30:40.459 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-03-04 10:30:40.520 [main] INFO  com.rev.app.controller.AuthControllerTest - Starting AuthControllerTest using Java 21.0.10 with PID 22644 (started by Jagan Mohan Reddy in C:\RevShop_P2\RevShop_P2)
+2026-03-04 10:30:40.525 [main] DEBUG com.rev.app.controller.AuthControllerTest - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-03-04 10:30:40.525 [main] INFO  com.rev.app.controller.AuthControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-04 10:30:44.045 [main] INFO  org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.rev.app.controller.AuthControllerTest]: AuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-04 10:30:44.390 [main] INFO  org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.rev.app.RevShopP2Application for test class com.rev.app.controller.AuthControllerTest
+2026-03-04 10:30:44.597 [main] INFO  org.springframework.boot.devtools.restart.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-04 10:30:45.242 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-03-04 10:30:45.302 [main] INFO  com.rev.app.controller.AuthControllerTest - Starting AuthControllerTest using Java 21.0.10 with PID 14096 (started by Jagan Mohan Reddy in C:\RevShop_P2\RevShop_P2)
+2026-03-04 10:30:45.306 [main] DEBUG com.rev.app.controller.AuthControllerTest - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-03-04 10:30:45.307 [main] INFO  com.rev.app.controller.AuthControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-04 10:30:48.122 [main] INFO  org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-03-04 10:30:49.347 [main] INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1aaaabd1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7cbe3a05, org.springframework.security.web.context.SecurityContextHolderFilter@1c0680b0, org.springframework.security.web.header.HeaderWriterFilter@b671dda, org.springframework.web.filter.CorsFilter@40b70f31, org.springframework.security.web.csrf.CsrfFilter@23e86863, org.springframework.security.web.authentication.logout.LogoutFilter@5621a671, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@aa23f11, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@3a13f663, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@3adde4ea, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@4db568e1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1af82ba8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@703cb756, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@75663443, org.springframework.security.web.access.ExceptionTranslationFilter@4c164f81, org.springframework.security.web.access.intercept.AuthorizationFilter@4cd90c36]
+2026-03-04 10:30:49.467 [main] INFO  org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-04 10:30:49.469 [main] INFO  org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+2026-03-04 10:30:49.471 [main] INFO  org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 2 ms
+2026-03-04 10:30:49.517 [main] INFO  com.rev.app.controller.AuthControllerTest - Started AuthControllerTest in 9.575 seconds (process running for 12.774)
+2026-03-04 10:30:49.847 [main] INFO  com.rev.app.controller.AuthController - Attempting to register new user with email: test@example.com
+2026-03-04 10:30:49.851 [main] INFO  com.rev.app.controller.AuthController - Registration successful for user: test@example.com
+2026-03-04 10:30:50.816 [main] INFO  com.rev.app.controller.AuthController - Displaying login form.
+2026-03-04 10:30:50.886 [main] INFO  com.rev.app.controller.AuthController - Attempting to register new user with email: test@example.com
+2026-03-04 10:30:50.887 [main] ERROR com.rev.app.controller.AuthController - Registration failed for user test@example.com: Email already exists
+2026-03-04 10:30:50.972 [main] WARN  com.rev.app.controller.AuthController - Failed login attempt detected.
+2026-03-04 10:30:51.094 [main] INFO  com.rev.app.controller.AuthController - User requested logout. Invalidating session.
+2026-03-04 10:30:51.603 [main] INFO  org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-03-04 10:30:54.016 [main] INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6c8e5ac4, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1800c1e3, org.springframework.security.web.context.SecurityContextHolderFilter@7c840fe3, org.springframework.security.web.header.HeaderWriterFilter@3a13f663, org.springframework.web.filter.CorsFilter@3b8b4846, org.springframework.security.web.csrf.CsrfFilter@5f8df69, org.springframework.security.web.authentication.logout.LogoutFilter@60c4cf2b, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@7bc8ffbc, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@983050b, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@4e357792, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@111cbcda, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5f5923ef, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7381d6f0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@50734cea, org.springframework.security.web.access.ExceptionTranslationFilter@4aa517c3, org.springframework.security.web.access.intercept.AuthorizationFilter@4db568e1]
+2026-03-04 10:30:54.342 [main] INFO  org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-04 10:30:54.343 [main] INFO  org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+2026-03-04 10:30:54.346 [main] INFO  org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 3 ms
+2026-03-04 10:30:54.574 [main] INFO  com.rev.app.controller.AuthControllerTest - Started AuthControllerTest in 9.999 seconds (process running for 12.529)
+2026-03-04 10:30:54.955 [main] INFO  com.rev.app.controller.AuthController - Attempting to register new user with email: test@example.com
+2026-03-04 10:30:54.965 [main] INFO  com.rev.app.controller.AuthController - Registration successful for user: test@example.com
+2026-03-04 10:30:55.874 [main] INFO  com.rev.app.controller.AuthController - Displaying login form.
+2026-03-04 10:30:55.922 [main] INFO  com.rev.app.controller.AuthController - Attempting to register new user with email: test@example.com
+2026-03-04 10:30:55.925 [main] ERROR com.rev.app.controller.AuthController - Registration failed for user test@example.com: Email already exists
+2026-03-04 10:30:55.960 [main] WARN  com.rev.app.controller.AuthController - Failed login attempt detected.
+2026-03-04 10:30:56.055 [main] INFO  com.rev.app.controller.AuthController - User requested logout. Invalidating session.
+2026-03-04 10:38:07.074 [main] INFO  org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.rev.app.controller.HomeControllerTest]: HomeControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-04 10:38:07.233 [main] INFO  org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.rev.app.RevShopP2Application for test class com.rev.app.controller.HomeControllerTest
+2026-03-04 10:38:07.340 [main] INFO  org.springframework.boot.devtools.restart.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-04 10:38:07.644 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-03-04 10:38:07.685 [main] INFO  com.rev.app.controller.HomeControllerTest - Starting HomeControllerTest using Java 21.0.10 with PID 18632 (started by Jagan Mohan Reddy in C:\RevShop_P2\RevShop_P2)
+2026-03-04 10:38:07.685 [main] DEBUG com.rev.app.controller.HomeControllerTest - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-03-04 10:38:07.685 [main] INFO  com.rev.app.controller.HomeControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-04 10:38:10.053 [main] INFO  org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-03-04 10:38:10.657 [main] INFO  org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5a4b8e25, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1013871e, org.springframework.security.web.context.SecurityContextHolderFilter@572b4072, org.springframework.security.web.header.HeaderWriterFilter@756200d1, org.springframework.web.filter.CorsFilter@5a9051fd, org.springframework.security.web.csrf.CsrfFilter@5d3f8661, org.springframework.security.web.authentication.logout.LogoutFilter@fefb66c, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@26888c31, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@79135a38, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@7614378d, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@669580e2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5b74902c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4e4bfd9c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7028b5cc, org.springframework.security.web.access.ExceptionTranslationFilter@19e8fe55, org.springframework.security.web.access.intercept.AuthorizationFilter@3e489ac1]
+2026-03-04 10:38:10.722 [main] INFO  org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-04 10:38:10.722 [main] INFO  org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+2026-03-04 10:38:10.722 [main] INFO  org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
+2026-03-04 10:38:10.747 [main] INFO  com.rev.app.controller.HomeControllerTest - Started HomeControllerTest in 3.423 seconds (process running for 5.395)
+2026-03-04 10:38:10.858 [main] DEBUG com.rev.app.controller.HomeController - Loading home page with featured products.
+2026-03-04 10:38:10.868 [main] DEBUG com.rev.app.controller.HomeController - Fetched 1 total products, rendering 1 as featured.
+2026-03-04 10:38:20.530 [main] INFO  org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.rev.app.repository.IProductRepositoryTest]: IProductRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-04 10:38:20.697 [main] INFO  org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.rev.app.RevShopP2Application for test class com.rev.app.repository.IProductRepositoryTest
+2026-03-04 10:38:20.783 [main] INFO  org.springframework.boot.devtools.restart.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-04 10:38:21.081 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-03-04 10:38:21.124 [main] INFO  com.rev.app.repository.IProductRepositoryTest - Starting IProductRepositoryTest using Java 21.0.10 with PID 15964 (started by Jagan Mohan Reddy in C:\RevShop_P2\RevShop_P2)
+2026-03-04 10:38:21.126 [main] DEBUG com.rev.app.repository.IProductRepositoryTest - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-03-04 10:38:21.127 [main] INFO  com.rev.app.repository.IProductRepositoryTest - The following 1 profile is active: "test"
+2026-03-04 10:38:21.703 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-04 10:38:21.823 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 104 ms. Found 13 JPA repository interfaces.
+2026-03-04 10:38:22.303 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-04 10:38:22.383 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-03-04 10:38:22.418 [main] INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-04 10:38:22.715 [main] INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-04 10:38:22.755 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-04 10:38:23.241 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@3356ff58
+2026-03-04 10:38:23.242 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-04 10:38:24.724 [main] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-04 10:38:25.331 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-04 10:38:26.051 [main] INFO  com.rev.app.repository.IProductRepositoryTest - Started IProductRepositoryTest in 5.27 seconds (process running for 6.986)
+2026-03-04 10:38:27.071 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-04 10:38:27.074 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-04 10:38:27.098 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-04 10:38:34.161 [main] INFO  org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.rev.app.repository.IUserRepositoryTest]: IUserRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-04 10:38:34.302 [main] INFO  org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.rev.app.RevShopP2Application for test class com.rev.app.repository.IUserRepositoryTest
+2026-03-04 10:38:34.396 [main] INFO  org.springframework.boot.devtools.restart.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-04 10:38:34.676 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-03-04 10:38:34.718 [main] INFO  com.rev.app.repository.IUserRepositoryTest - Starting IUserRepositoryTest using Java 21.0.10 with PID 18308 (started by Jagan Mohan Reddy in C:\RevShop_P2\RevShop_P2)
+2026-03-04 10:38:34.718 [main] DEBUG com.rev.app.repository.IUserRepositoryTest - Running with Spring Boot v3.2.4, Spring v6.1.5
+2026-03-04 10:38:34.718 [main] INFO  com.rev.app.repository.IUserRepositoryTest - The following 1 profile is active: "test"
+2026-03-04 10:38:35.268 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-04 10:38:35.390 [main] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 110 ms. Found 13 JPA repository interfaces.
+2026-03-04 10:38:35.840 [main] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-04 10:38:35.910 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-03-04 10:38:35.940 [main] INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-04 10:38:36.219 [main] INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-04 10:38:36.249 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-04 10:38:36.631 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@75527e36
+2026-03-04 10:38:36.631 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-04 10:38:38.030 [main] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-04 10:38:38.453 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-04 10:38:39.260 [main] INFO  com.rev.app.repository.IUserRepositoryTest - Started IUserRepositoryTest in 4.875 seconds (process running for 6.463)
+2026-03-04 10:38:39.984 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-04 10:38:39.986 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-04 10:38:40.000 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-04 10:38:47.605 [main] INFO  com.rev.app.service.Impl.ProductServiceImpl - Updating existing product ID: 1
+2026-03-04 10:38:47.611 [main] DEBUG com.rev.app.service.Impl.ProductServiceImpl - Fetching product by ID: 1
+2026-03-04 10:38:47.626 [main] INFO  com.rev.app.service.Impl.ProductServiceImpl - Adding new product: Laptop
+2026-03-04 10:38:47.634 [main] DEBUG com.rev.app.service.Impl.ProductServiceImpl - Fetching product by ID: 1
+2026-03-04 10:38:47.650 [main] DEBUG com.rev.app.service.Impl.ProductServiceImpl - Fetching all products from repository.
+2026-03-04 10:38:59.013 [main] DEBUG com.rev.app.service.Impl.UserServiceImpl - User login attempt for email test@example.com
+2026-03-04 10:38:59.020 [main] WARN  com.rev.app.service.Impl.UserServiceImpl - Login failed. Invalid password provided for email test@example.com
+2026-03-04 10:38:59.052 [main] DEBUG com.rev.app.service.Impl.UserServiceImpl - User login attempt for email unknown@example.com
+2026-03-04 10:38:59.053 [main] WARN  com.rev.app.service.Impl.UserServiceImpl - Login failed. No account found for email unknown@example.com
+2026-03-04 10:38:59.057 [main] DEBUG com.rev.app.service.Impl.UserServiceImpl - Attempting to register user with email test@example.com
+2026-03-04 10:38:59.057 [main] INFO  com.rev.app.service.Impl.UserServiceImpl - Successfully registered user with ID 1
+2026-03-04 10:38:59.075 [main] DEBUG com.rev.app.service.Impl.UserServiceImpl - User login attempt for email test@example.com
+2026-03-04 10:38:59.075 [main] INFO  com.rev.app.service.Impl.UserServiceImpl - User test@example.com successfully logged in.
+2026-03-04 10:38:59.080 [main] DEBUG com.rev.app.service.Impl.UserServiceImpl - Attempting to register user with email test@example.com
+2026-03-04 10:38:59.082 [main] WARN  com.rev.app.service.Impl.UserServiceImpl - Registration failed. Email test@example.com already exists.

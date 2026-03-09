@@ -10,4 +10,6 @@ public class UserRegistrationDto {
     private String phone;
     private String password;
     private User.Role role;
+    private String securityQuestion;
+    private String securityAnswer;
 }

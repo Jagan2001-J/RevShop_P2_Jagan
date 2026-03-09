@@ -1,0 +1,8 @@
+2026-03-09 14:26:47.586 [http-nio-9090-exec-7] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper - ORA-02290: check constraint (REVSHOP.SYS_C008685) violated
+
+2026-03-09 14:26:47.616 [http-nio-9090-exec-7] ERROR com.rev.app.controller.BuyerController - Failed to process checkout for user Jaganmohan2001@gmail.com: could not execute statement [ORA-02290: check constraint (REVSHOP.SYS_C008685) violated
+] [insert into payments (amount,created_at,order_id,payment_method,status,transaction_id,id) values (?,?,?,?,?,?,default)]; SQL [insert into payments (amount,created_at,order_id,payment_method,status,transaction_id,id) values (?,?,?,?,?,?,default)]; constraint [null]
+2026-03-09 14:27:06.659 [http-nio-9090-exec-1] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper - ORA-02290: check constraint (REVSHOP.SYS_C008685) violated
+
+2026-03-09 14:27:06.659 [http-nio-9090-exec-1] ERROR com.rev.app.controller.BuyerController - Failed to process checkout for user Jaganmohan2001@gmail.com: could not execute statement [ORA-02290: check constraint (REVSHOP.SYS_C008685) violated
+] [insert into payments (amount,created_at,order_id,payment_method,status,transaction_id,id) values (?,?,?,?,?,?,default)]; SQL [insert into payments (amount,created_at,order_id,payment_method,status,transaction_id,id) values (?,?,?,?,?,?,default)]; constraint [null]

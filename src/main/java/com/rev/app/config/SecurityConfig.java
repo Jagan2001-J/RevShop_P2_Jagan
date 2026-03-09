@@ -58,8 +58,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/register", "/register-buyer", "/register-seller",
-                                "/forgot-password/**", "/products/**", "/product/**", "/css/**", "/js/**", "/images/**",
-                                "/favicon.ico", "/error")
+                                "/forgot-password", "/forgot-password-question", "/reset-password", "/products/**",
+                                "/product/**", "/css/**", "/js/**", "/images/**", "/favicon.ico", "/error")
                         .permitAll()
                         .requestMatchers("/seller/**", "/api/seller/**").hasRole("SELLER")
                         .requestMatchers("/buyer/**", "/api/buyer/**").hasRole("BUYER")

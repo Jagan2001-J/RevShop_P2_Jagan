@@ -21,7 +21,7 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
+    @Column(name = "total_amount", nullable = false)
     private BigDecimal totalAmount;
 
     public enum OrderStatus {
@@ -29,7 +29,7 @@ public class Order {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "order_status", nullable = false)
     private OrderStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)

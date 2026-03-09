@@ -6,4 +6,8 @@ public interface IUserService {
     User registerUser(User user);
 
     User loginUser(String email, String password);
+
+    User getUserByEmail(String email);
+
+    void updatePassword(String email, String newPassword);
 }

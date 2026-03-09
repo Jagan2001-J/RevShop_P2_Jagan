@@ -78,6 +78,8 @@ public class AuthController {
             user.setPhone(dto.getPhone());
             user.setPassword(dto.getPassword());
             user.setRole(dto.getRole());
+            user.setSecurityQuestion(dto.getSecurityQuestion());
+            user.setSecurityAnswer(dto.getSecurityAnswer());
 
             userService.registerUser(user);
             log.info("Registration successful for user: {}", dto.getEmail());
@@ -96,6 +98,73 @@ public class AuthController {
         log.info("User requested logout. Invalidating session.");
         session.invalidate();
         redirectAttributes.addFlashAttribute("msg", "You have been logged out successfully.");
+        return "redirect:/login";
+    }
+
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordForm() {
+        return "forgot-password";
+    }
+
+    @PostMapping("/forgot-password")
+    public String processEmail(@RequestParam String email, HttpSession session, RedirectAttributes redirectAttributes) {
+        User user = userService.getUserByEmail(email);
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("error", "Email not found.");
+            return "redirect:/forgot-password";
+        }
+        if (user.getSecurityQuestion() == null || user.getSecurityQuestion().trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error",
+                    "No security question configured for this account. Please contact support.");
+            return "redirect:/forgot-password";
+        }
+        session.setAttribute("resetEmail", email);
+        session.setAttribute("securityQuestion", user.getSecurityQuestion());
+        return "redirect:/forgot-password-question";
+    }
+
+    @GetMapping("/forgot-password-question")
+    public String showSecurityQuestion(HttpSession session, Model model) {
+        String question = (String) session.getAttribute("securityQuestion");
+        if (question == null)
+            return "redirect:/forgot-password";
+        model.addAttribute("question", question);
+        return "forgot-password-question";
+    }
+
+    @PostMapping("/forgot-password-question")
+    public String verifyAnswer(@RequestParam String answer, HttpSession session,
+            RedirectAttributes redirectAttributes) {
+        String email = (String) session.getAttribute("resetEmail");
+        User user = userService.getUserByEmail(email);
+        if (user != null && user.getSecurityAnswer().equalsIgnoreCase(answer)) {
+            session.setAttribute("answerVerified", true);
+            return "redirect:/reset-password";
+        }
+        redirectAttributes.addFlashAttribute("error", "Incorrect answer.");
+        return "redirect:/forgot-password-question";
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordForm(HttpSession session) {
+        if (session.getAttribute("answerVerified") == null)
+            return "redirect:/forgot-password";
+        return "reset-password";
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword(@RequestParam String password, HttpSession session,
+            RedirectAttributes redirectAttributes) {
+        String email = (String) session.getAttribute("resetEmail");
+        if (email == null || session.getAttribute("answerVerified") == null)
+            return "redirect:/forgot-password";
+
+        userService.updatePassword(email, password);
+        session.removeAttribute("resetEmail");
+        session.removeAttribute("securityQuestion");
+        session.removeAttribute("answerVerified");
+
+        redirectAttributes.addFlashAttribute("msg", "Password updated successfully. Please login.");
         return "redirect:/login";
     }
 }

@@ -50,4 +50,17 @@ public class UserServiceImpl implements IUserService {
         log.info("User {} successfully logged in.", email);
         return u;
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return repo.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public void updatePassword(String email, String newPassword) {
+        User user = repo.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        repo.save(user);
+        log.info("Password updated successfully for user {}", email);
+    }
 }

@@ -21,11 +21,11 @@ public class Payment {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false)
     private BigDecimal amount;
 
     public enum PaymentMethod {
-        COD, CREDIT_CARD, DEBIT_CARD, PAYPAL
+        COD, CREDIT_CARD, DEBIT_CARD, UPI
     }
 
     public enum PaymentStatus {

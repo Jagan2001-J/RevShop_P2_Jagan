@@ -49,30 +49,36 @@
                                     th:text="${order.id}"></span></span>
 
                             <!-- Status Badge -->
-                            <span th:if="${order.status.name() == 'PENDING'}"
-                                class="badge bg-warning text-dark rounded-pill px-3 py-2"><i
-                                    class="fa-solid fa-clock me-1"></i> Pending</span>
-                            <span th:if="${order.status.name() == 'PROCESSING'}"
-                                class="badge bg-info text-dark rounded-pill px-3 py-2"><i
-                                    class="fa-solid fa-spinner fa-spin me-1"></i> Processing</span>
-                            <span th:if="${order.status.name() == 'SHIPPED'}"
-                                class="badge bg-primary rounded-pill px-3 py-2"><i
-                                    class="fa-solid fa-truck-fast me-1"></i> Shipped</span>
-                            <span th:if="${order.status.name() == 'DELIVERED'}"
-                                class="badge bg-success rounded-pill px-3 py-2"><i
-                                    class="fa-solid fa-check-double me-1"></i> Delivered</span>
-                            <span th:if="${order.status.name() == 'CANCELLED'}"
-                                class="badge bg-danger rounded-pill px-3 py-2"><i class="fa-solid fa-ban me-1"></i>
-                                Cancelled</span>
+                            <div th:if="${order.status != null}" th:switch="${order.status.name()}">
+                                <span th:case="'PENDING'" class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                                    <i class="fa-solid fa-clock me-1"></i> Pending
+                                </span>
+                                <span th:case="'PROCESSING'" class="badge bg-info text-dark rounded-pill px-3 py-2">
+                                    <i class="fa-solid fa-spinner fa-spin me-1"></i> Processing
+                                </span>
+                                <span th:case="'SHIPPED'" class="badge bg-primary rounded-pill px-3 py-2">
+                                    <i class="fa-solid fa-truck-fast me-1"></i> Shipped
+                                </span>
+                                <span th:case="'DELIVERED'" class="badge bg-success rounded-pill px-3 py-2">
+                                    <i class="fa-solid fa-check-double me-1"></i> Delivered
+                                </span>
+                                <span th:case="'CANCELLED'" class="badge bg-danger rounded-pill px-3 py-2">
+                                    <i class="fa-solid fa-ban me-1"></i> Cancelled
+                                </span>
+                            </div>
+                            <span th:if="${order.status == null}" class="badge bg-secondary rounded-pill px-3 py-2">
+                                <i class="fa-solid fa-question me-1"></i> Unknown Status
+                            </span>
                         </div>
                     </div>
 
                     <!-- Order Body (Items) -->
                     <div class="card-body p-4 bg-white">
-                        <h5 class="fw-bold mb-3 text-success" th:if="${order.status.name() == 'DELIVERED'}">Delivered
+                        <h5 class="fw-bold mb-3 text-success"
+                            th:if="${order.status != null and order.status.name() == 'DELIVERED'}">Delivered
                             successfully</h5>
-                        <h5 class="fw-bold mb-3 text-primary" th:if="${order.status.name() == 'SHIPPED'}">Arriving soon
-                        </h5>
+                        <h5 class="fw-bold mb-3 text-primary"
+                            th:if="${order.status != null and order.status.name() == 'SHIPPED'}">Arriving soon</h5>
 
                         <!-- We assume OrderService/Controller provides items along with orders -->
                         <div class="row align-items-center mb-3 border-bottom pb-3"
@@ -99,7 +105,8 @@
                                     again</a>
                                 <a th:href="@{/product/{id}#reviews(id=${item.product.id})}"
                                     class="btn btn-light btn-sm rounded-pill border mx-md-auto w-100"
-                                    th:if="${order.status.name() == 'DELIVERED'}">Write a product review</a>
+                                    th:if="${order.status != null and order.status.name() == 'DELIVERED'}">Write a
+                                    product review</a>
                             </div>
                         </div>
                     </div>

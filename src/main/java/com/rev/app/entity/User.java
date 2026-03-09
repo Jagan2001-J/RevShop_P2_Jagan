@@ -27,6 +27,12 @@ public class User {
 
     private String phone;
 
+    @Column(name = "security_question")
+    private String securityQuestion;
+
+    @Column(name = "security_answer")
+    private String securityAnswer;
+
     public enum Role {
         BUYER, SELLER, ADMIN
     }

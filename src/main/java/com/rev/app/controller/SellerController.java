@@ -28,6 +28,8 @@ public class SellerController {
     @Autowired
     private INotificationService notificationService;
     @Autowired
+    private IFileStorageService fileStorageService;
+    @Autowired
     private IOrderItemRepository orderItemRepo; // Using repo directly for simplicity to get items by product
 
     // --- Dashboard Overview ---
@@ -100,6 +102,7 @@ public class SellerController {
 
     @PostMapping("/product/add")
     public String addProduct(@ModelAttribute Product product, @RequestParam String categoryName,
+            @RequestParam("imageFile") org.springframework.web.multipart.MultipartFile imageFile,
             HttpSession session, RedirectAttributes redirectAttributes) {
         if (!isSeller(session))
             return "redirect:/login";
@@ -109,6 +112,13 @@ public class SellerController {
         try {
             product.setCategory(Product.Category.valueOf(categoryName));
             product.setSeller(seller);
+
+            // Handle image upload
+            if (imageFile != null && !imageFile.isEmpty()) {
+                String imagePath = fileStorageService.saveFile(imageFile);
+                product.setImageUrl(imagePath);
+            }
+
             // created and updated normally handled by @PrePersist
             product.setCreatedAt(LocalDateTime.now());
             product.setUpdatedAt(LocalDateTime.now());
@@ -144,6 +154,7 @@ public class SellerController {
 
     @PostMapping("/product/update")
     public String updateProduct(@ModelAttribute Product product, @RequestParam String categoryName,
+            @RequestParam("imageFile") org.springframework.web.multipart.MultipartFile imageFile,
             HttpSession session, RedirectAttributes redirectAttributes) {
         if (!isSeller(session))
             return "redirect:/login";
@@ -166,7 +177,25 @@ public class SellerController {
             existingProduct.setPrice(product.getPrice());
             existingProduct.setDiscountedPrice(product.getDiscountedPrice());
             existingProduct.setQuantity(product.getQuantity());
-            existingProduct.setImageUrl(product.getImageUrl());
+
+            // Handle image upload
+            if (imageFile != null && !imageFile.isEmpty()) {
+                // Optionally delete old file if it was an upload
+                if (existingProduct.getImageUrl() != null && existingProduct.getImageUrl().startsWith("/uploads/")) {
+                    fileStorageService.deleteFile(existingProduct.getImageUrl());
+                }
+                String imagePath = fileStorageService.saveFile(imageFile);
+                existingProduct.setImageUrl(imagePath);
+            } else if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
+                // If it's a URL, update it. If it was an upload, we might want to delete it if
+                // URL is provided.
+                if (existingProduct.getImageUrl() != null && existingProduct.getImageUrl().startsWith("/uploads/")
+                        && !product.getImageUrl().equals(existingProduct.getImageUrl())) {
+                    fileStorageService.deleteFile(existingProduct.getImageUrl());
+                }
+                existingProduct.setImageUrl(product.getImageUrl());
+            }
+
             existingProduct.setCategory(Product.Category.valueOf(categoryName));
             existingProduct.setUpdatedAt(LocalDateTime.now());
 

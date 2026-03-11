@@ -31,7 +31,7 @@
                 <div class="card border-0 shadow-sm rounded-4">
                     <div class="card-body p-4 p-md-5 bg-white">
                         <form th:action="@{${product.id == null ? '/seller/product/add' : '/seller/product/update'}}"
-                            method="post" th:object="${product}">
+                            method="post" th:object="${product}" enctype="multipart/form-data">
 
                             <input type="hidden" th:field="*{id}" />
 
@@ -60,7 +60,7 @@
 
                                 <!-- Category and Image -->
                                 <div class="col-md-4">
-                                    <h5 class="fw-bold mb-3 border-bottom pb-2">Organization</h5>
+                                    <h5 class="fw-bold mb-3 border-bottom pb-2">Organization & Image</h5>
 
                                     <div class="mb-3">
                                         <label for="category" class="form-label fw-bold text-dark small">Category <span
@@ -75,20 +75,48 @@
                                         </select>
                                     </div>
 
-                                    <div class="mb-3 mt-4">
-                                        <label for="imageUrl" class="form-label fw-bold text-dark small">Image URL <span
-                                                class="text-danger">*</span></label>
-                                        <input type="url" class="form-control" id="imageUrl" th:field="*{imageUrl}"
-                                            required placeholder="https://example.com/image.jpg">
-                                        <div class="mt-2 text-center bg-light border rounded p-2"
-                                            style="height: 150px;">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold text-dark small d-block">Product Image</label>
+
+                                        <ul class="nav nav-pills nav-justified mb-2 small" id="imageTab" role="tablist"
+                                            style="--bs-nav-pills-link-active-bg: var(--bs-primary);">
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link active py-1" id="upload-tab"
+                                                    data-bs-toggle="pill" data-bs-target="#upload-pane" type="button"
+                                                    role="tab" style="font-size: 0.8rem;">Upload</button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link py-1" id="url-tab" data-bs-toggle="pill"
+                                                    data-bs-target="#url-pane" type="button" role="tab"
+                                                    style="font-size: 0.8rem;">URL</button>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content" id="imageTabContent">
+                                            <div class="tab-pane fade show active" id="upload-pane" role="tabpanel">
+                                                <input type="file" class="form-control form-control-sm" id="imageFile"
+                                                    name="imageFile" accept="image/*">
+                                                <div class="form-text small" style="font-size: 0.7rem;">Max 5MB. Jpg,
+                                                    Png, Webp.</div>
+                                            </div>
+                                            <div class="tab-pane fade" id="url-pane" role="tabpanel">
+                                                <input type="url" class="form-control form-control-sm" id="imageUrl"
+                                                    th:field="*{imageUrl}" placeholder="https://example.com/image.jpg">
+                                                <div class="form-text small" style="font-size: 0.7rem;">Direct link to
+                                                    image.</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-3 text-center bg-light border rounded p-2 d-flex align-items-center justify-content-center"
+                                            style="height: 150px; overflow: hidden;">
                                             <img th:if="${product.imageUrl != null and !product.imageUrl.isEmpty()}"
                                                 th:src="${product.imageUrl}" class="img-fluid h-100 object-fit-contain"
                                                 alt="Preview" id="imagePreview">
                                             <div th:unless="${product.imageUrl != null and !product.imageUrl.isEmpty()}"
+                                                id="previewFallback"
                                                 class="d-flex flex-column align-items-center justify-content-center h-100 text-secondary">
                                                 <i class="fa-regular fa-image fs-1 mb-2"></i>
-                                                <span class="small">Image Preview</span>
+                                                <span class="small">Preview</span>
                                             </div>
                                         </div>
                                     </div>
@@ -148,13 +176,42 @@
 
     <!-- Simple Script for Image Preview -->
     <script>
-        document.getElementById('imageUrl').addEventListener('input', function (e) {
-            var url = e.target.value;
-            var container = document.querySelector('.mt-2.text-center');
-            if (url) {
-                container.innerHTML = '<img src="' + url + '" class="img-fluid h-100 object-fit-contain" alt="Preview">';
+        const imageUrlInput = document.getElementById('imageUrl');
+        const imageFileInput = document.getElementById('imageFile');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewFallback = document.getElementById('previewFallback');
+        const container = document.querySelector('.mt-3.text-center');
+
+        function updatePreview(src) {
+            if (src) {
+                if (imagePreview) {
+                    imagePreview.src = src;
+                    imagePreview.classList.remove('d-none');
+                    if (previewFallback) previewFallback.classList.add('d-none');
+                } else {
+                    container.innerHTML = `<img src="${src}" id="imagePreview" class="img-fluid h-100 object-fit-contain" alt="Preview">`;
+                }
             } else {
-                container.innerHTML = '<div class="d-flex flex-column align-items-center justify-content-center h-100 text-secondary"><i class="fa-regular fa-image fs-1 mb-2"></i><span class="small">Image Preview</span></div>';
+                if (imagePreview) imagePreview.classList.add('d-none');
+                if (previewFallback) {
+                    previewFallback.classList.remove('d-none');
+                } else {
+                    container.innerHTML = `<div id="previewFallback" class="d-flex flex-column align-items-center justify-content-center h-100 text-secondary"><i class="fa-regular fa-image fs-1 mb-2"></i><span class="small">Preview</span></div>`;
+                }
+            }
+        }
+
+        imageUrlInput.addEventListener('input', function (e) {
+            updatePreview(e.target.value);
+        });
+
+        imageFileInput.addEventListener('change', function (e) {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    updatePreview(e.target.result);
+                }
+                reader.readAsDataURL(this.files[0]);
             }
         });
     </script>
